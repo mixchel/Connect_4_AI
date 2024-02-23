@@ -36,7 +36,7 @@ class game:
     def putGamePiece(self, collumn, piece):
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
-        if self.check_win_after_move_2(piece_placement, collumn, piece): self.game_winner = piece
+        if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece
         return
     
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
@@ -52,7 +52,7 @@ class game:
             if value == EMPTY: return i
         return
 
-    """
+
     # def segments(self):
     #     segmentsList = []
     #     for row in self.board:
@@ -66,82 +66,81 @@ class game:
         for i in range(move_row - 3,move_row + 4):
             if i in range(0,6) and self.board[i][move_col] == piece: row_count += 1
             else: row_count = 0
-        if row_count >= 4: return True
+            if row_count >= 4: return True
         collumn_count = 0
         for j in range(move_col - 3, move_col + 4):
             if j in range(0,7) and self.board[move_row][j] == piece:
                 collumn_count += 1
                 print("im, here")
             else: collumn_count = 0 
-        if collumn_count >= 4: return True
+            if collumn_count >= 4: return True
         downrightdiag_count = 0
         for k in range(-3, 4):
             i = move_row + k
             j = move_col + k 
             if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: downrightdiag_count += 1
             else: downrightdiag_count = 0
-        if downrightdiag_count >= 4: return True
+            if downrightdiag_count >= 4: return True
         upleftdiag_count = 0
         for k in range(-3, 4):
             i = move_row - k
             j = move_col + k 
             if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: upleftdiag_count += 1
             else: upleftdiag_count = 0
-        if upleftdiag_count >= 4: return True
+            if upleftdiag_count >= 4: return True
         return False
-    """
     
     """Função que checa se houve vitória após cada movimento."""
-    def check_win_after_move_2(self, move_row, move_col, piece):
+    # def check_win_after_move_2(self, move_row, move_col, piece):
         
-        #verificar se houve vitória na row
-        row_count = 0 #conta quantas vezes seguidas a peça aparece na row
-        for i in range(NUM_COL):
-            if self.board[move_row][i] == piece: 
-                row_count += 1
-                if row_count >= 4: 
-                    return True
-            else: 
-                row_count = 0
+    #     #verificar se houve vitória na row
+    #     row_count = 0 #conta quantas vezes seguidas a peça aparece na row
+    #     for i in range(NUM_COL):
+    #         if self.board[move_row][i] == piece: 
+    #             row_count += 1
+    #             if row_count >= 4: 
+    #                 return True
+    #         else: 
+    #             row_count = 0
         
         
-        #verificar se houve vitória na coluna
-        col_count = 0 #conta quantas vezes seguidas a peça aparece na coluna
-        for i in range(NUM_ROW):
-            if self.board[i][move_col] == piece: 
-                col_count += 1
-                if col_count >= 4: 
-                    return True
-            else: 
-                col_count = 0
+    #     #verificar se houve vitória na coluna
+    #     col_count = 0 #conta quantas vezes seguidas a peça aparece na coluna
+    #     for i in range(NUM_ROW):
+    #         if self.board[i][move_col] == piece: 
+    #             col_count += 1
+    #             if col_count >= 4: 
+    #                 return True
+    #         else: 
+    #             col_count = 0
         
-        #verificar se houve vitória na diagonal principal e adjacentes
-        r_diag_count = 0
-        r_diag_array = []
-        for k in range(-2,4): #gerar os r_array a partir da diagonal principal
-            r_diag_array = np.diag(self.board, k) #transforma uma diagonal num array uni-dimensional
-            for i in range(r_diag_array.size): #verifica cada array pra ver se houve vitória
-                if r_diag_array[i] == piece:
-                    r_diag_count += 1
-                    if r_diag_count >= 4: 
-                        return True
-                else: 
-                    r_diag_count = 0
+    #     #verificar se houve vitória na diagonal principal e adjacentes
+    #     r_diag_count = 0
+    #     r_diag_array = []
+    #     for k in range(-2,4): #gerar os r_array a partir da diagonal principal
+    #         r_diag_array = np.diag(self.board, k) #transforma uma diagonal num array uni-dimensional
+    #         for i in range(r_diag_array.size): #verifica cada array pra ver se houve vitória
+    #             if r_diag_array[i] == piece:
+    #                 r_diag_count += 1
+    #                 if r_diag_count >= 4: 
+    #                     return True
+    #             else: 
+    #                 r_diag_count = 0
                     
-        #verificar se houve vitória na diagonal secundária e adjacentes
-        l_diag_count = 0
-        l_diag_array = []
-        for k in range(-2,4): #gerar os r_array a partir da diagonal principal
-            l_diag_array = np.diag(np.fliplr(self.board), k) #dá flip no array e verifica as diagonais principais do array flipado
-            for i in range(l_diag_array.size): #verifica cada array pra ver se houve vitória
-                if l_diag_array[i] == piece:
-                    l_diag_count += 1
-                    if l_diag_count >= 4: 
-                        return True
-                else: 
-                    l_diag_count = 0
+    #     #verificar se houve vitória na diagonal secundária e adjacentes
+    #     l_diag_count = 0
+    #     l_diag_array = []
+    #     for k in range(-2,4): #gerar os r_array a partir da diagonal principal
+    #         l_diag_array = np.diag(np.fliplr(self.board), k) #dá flip no array e verifica as diagonais principais do array flipado
+    #         for i in range(l_diag_array.size): #verifica cada array pra ver se houve vitória
+    #             if l_diag_array[i] == piece:
+    #                 l_diag_count += 1
+    #                 if l_diag_count >= 4: 
+    #                     return True
+    #             else: 
+    #                 l_diag_count = 0
                     
-        return False
+    #     return False
     
     #função que decide quem começa o jogo
     def start(self):
