@@ -71,7 +71,6 @@ class game:
         for j in range(move_col - 3, move_col + 4):
             if j in range(NUM_COL) and self.board[move_row][j] == piece:
                 collumn_count += 1
-                print("im, here")
             else: collumn_count = 0 
             if collumn_count >= 4: return True
         downrightdiag_count = 0
