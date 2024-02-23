@@ -1,12 +1,17 @@
 import numpy as np
+import os #poder usar função clear
+
+clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
 
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = '-'
 PLAYER_PIECE = 'X'
+AI_PIECE = 'O'
 
 class game:
     game_winner = EMPTY
+    
     def __init__(self):
         self.board = np.full([NUM_ROW,NUM_COL],EMPTY)
 
@@ -26,9 +31,6 @@ class game:
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
         if self.check_win_after_move(piece_placement, collumn, piece): game_winner = piece
-             
-        
-
     
     def availableRows(self):
         available = []
@@ -72,3 +74,61 @@ class game:
         if count >= 4: return True
         return False
     
+    #função que decide quem começa o jogo
+    def start(self):
+        who_starts = int(input("\nType 0 to begin or 1 to go second:"))
+        if (who_starts != 0) and (who_starts != 1):
+            self.start()
+        return who_starts
+    
+    #Granda AI
+    def a_star(self):
+        self.putGamePiece(0, AI_PIECE) #granda ai
+        return
+    
+#inicializa um novo jogo, e permite resetar (1) ou quitar (0)
+new_game = 1
+
+while new_game == 1:
+    #iniciando o game loop
+    game = game() #inicia um novo objeto game
+    turn = 0
+    start = game.start() #decide quem começa
+    game.drawBoard()
+
+    """Enquanto não houver ganhador ou der empate o jogo continua.
+    O ciclo avalia quem começa e progride de acordo.
+    Só é necessário imprimir a board para os jogos da AI, pois ela joga logo depois do player."""
+    while game.game_winner == EMPTY: 
+        if start == 0:
+        #jogador começa
+            if turn % 2 == 0:
+                game.playOneTurn()
+            else:
+                game.a_star()
+                clear()
+                game.drawBoard()
+
+        #a_star começa
+        else:
+            if turn % 2 == 0:
+                game.a_star()
+                clear()
+                game.drawBoard()
+            else:
+                game.playOneTurn()
+
+        turn += 1 #incrementar o turno
+
+    #não importa quem jogou por último, o output é limpo e redesenhado
+    clear()
+    game.drawBoard()
+
+    if game.game_winner == "It's a tie!": #empate
+        print(f"\n{game.game_winner}")
+    else:
+        print(f"\n{game.game_winner} Won!") #vitória
+    
+    new_game = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
+
+quit()
