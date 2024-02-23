@@ -159,43 +159,43 @@ new_game = 1
 
 while new_game == 1:
     #iniciando o game loop
-    game = game() #inicia um novo objeto game
+    novo_game = game() #inicia um novo objeto game
     turn = 0
-    start = game.start() #decide quem começa
-    game.drawBoard()
+    start = novo_game.start() #decide quem começa
+    novo_game.drawBoard()
 
     """Enquanto não houver ganhador ou der empate o jogo continua.
     O ciclo avalia quem começa e progride de acordo.
     Só é necessário imprimir a board para os jogos da AI, pois ela joga logo depois do player."""
-    while game.game_winner == EMPTY:
+    while novo_game.game_winner == EMPTY:
         if start == 0:
         #jogador começa
             if turn % 2 == 0:
-                game.playOneTurn()
+                novo_game.playOneTurn()
             else:
-                game.a_star()
+                novo_game.a_star()
                 clear()
-                game.drawBoard()
+                novo_game.drawBoard()
 
         #a_star começa
         else:
             if turn % 2 == 0:
-                game.a_star()
+                novo_game.a_star()
                 clear()
-                game.drawBoard()
+                novo_game.drawBoard()
             else:
-                game.playOneTurn()
+                novo_game.playOneTurn()
 
         turn += 1 #incrementar o turno
 
     #não importa quem jogou por último, o output é limpo e redesenhado
     clear()
-    game.drawBoard()
+    novo_game.drawBoard()
 
-    if game.game_winner == "It's a tie!": #empate
-        print(f"\n{game.game_winner}")
+    if novo_game.game_winner == "It's a tie!": #empate
+        print(f"\n{novo_game.game_winner}")
     else:
-        print(f"\n{game.game_winner} Won!") #vitória
+        print(f"\n{novo_game.game_winner} Won!") #vitória
     
     new_game = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
 
