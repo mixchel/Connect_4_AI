@@ -1,7 +1,9 @@
 import numpy as np
 import os #poder usar função clear
 
-clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+#clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+def clear():
+    pass
 
 NUM_ROW = 6
 NUM_COL = 7
@@ -30,7 +32,8 @@ class game:
     def putGamePiece(self, collumn, piece):
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
-        if self.check_win_after_move(piece_placement, collumn, piece): game_winner = piece
+        if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece
+        return
     
     def availableRows(self):
         available = []
@@ -51,27 +54,32 @@ class game:
     #         segmentsList.append(row)
     #     # Coloca as linhas da transposta da matriz na lista, equivalente as colunas da matriz original
     def check_win_after_move(self, moverow, movecollumn, piece):
+        row_count = 0
         for i in range(moverow - 3,moverow + 4):
-            if i in range(0,6) and self.board[i][movecollumn] == piece: count += 1
-            else: count = 0
-        if count >= 4: return True
-        count = 0
+            if i in range(0,6) and self.board[i][movecollumn] == piece: row_count += 1
+            else: row_count = 0
+        if row_count >= 4: return True
+        collumn_count = 0
         for j in range(movecollumn - 3, movecollumn + 4):
-            if j in range(0,7) and self.board[moverow][j] == piece: count += 1
-            else: count = 0  
-        if count >= 4: return True
+            if j in range(0,7) and self.board[moverow][j] == piece:
+                collumn_count += 1
+                print("im, here")
+            else: collumn_count = 0 
+        if collumn_count >= 4: return True
+        downrightdiag_count = 0
         for k in range(-3, 4):
             i = moverow + k
             j = movecollumn + k 
-            if i in range(0,6) and j in range(0,6) and self.board[i][j] == piece: count += 1
-            else: count = 0
-        if count >= 4: return True
+            if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: downrightdiag_count += 1
+            else: downrightdiag_count = 0
+        if downrightdiag_count >= 4: return True
+        upleftdiag_count = 0
         for k in range(-3, 4):
             i = moverow - k
             j = movecollumn + k 
-            if i in range(0,6) and j in range(0,6) and self.board[i][j] == piece: count += 1
-            else: count = 0
-        if count >= 4: return True
+            if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: upleftdiag_count += 1
+            else: upleftdiag_count = 0
+        if upleftdiag_count >= 4: return True
         return False
     
     #função que decide quem começa o jogo
@@ -99,7 +107,7 @@ while new_game == 1:
     """Enquanto não houver ganhador ou der empate o jogo continua.
     O ciclo avalia quem começa e progride de acordo.
     Só é necessário imprimir a board para os jogos da AI, pois ela joga logo depois do player."""
-    while game.game_winner == EMPTY: 
+    while game.game_winner == EMPTY:
         if start == 0:
         #jogador começa
             if turn % 2 == 0:
