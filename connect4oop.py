@@ -1,9 +1,9 @@
 import numpy as np
 import os #poder usar função clear
 
-#clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
-def clear():
-    pass
+clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+# def clear():
+#    pass
 
 NUM_ROW = 6
 NUM_COL = 7
@@ -21,26 +21,32 @@ class game:
         print(np.flip(self.board, 0))
         return
     
+    """Dado um input, verifica a função availableRows para saber se é válido.
+    Se não for pede novamente o input, do contrário usa a função putGamePiece para alterar a board."""
     def playOneTurn(self):
         available = self.availableRows()
-        collumn = int(input("Choose in which collumn do you wanna play"))
+        collumn = int(input("Choose in which collumn do you wanna play: "))
         while collumn not in available:
-            collumn = int(input("The collumn you selected is either full or invalid, choose another one"))
+            collumn = int(input("The collumn you selected is either full or invalid, choose another one: "))
         self.putGamePiece(collumn, PLAYER_PIECE)
         return
     
+    """Verifica a função nextEmptyRowinCollumn para saber qual a próxima row vazia.
+    Alterar a board dado a coluna e a qual das peças (AI ou Player) será usada e põe na row vazia."""
     def putGamePiece(self, collumn, piece):
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
         if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece
         return
     
+    """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
     def availableRows(self):
         available = []
-        for i,value in enumerate(self.board[5]):
+        for i,value in enumerate(self.board[NUM_ROW - 1]):
             if value == EMPTY: available.append(i) 
         return available
     
+    """Dado uma coluna, verifica qual a próxima row vazia. Retorna o número da row."""
     def nextEmptyRowinCollumn(self, collumn):
         for i,value in enumerate(self.board[:,collumn]):
             if value == EMPTY: return i
