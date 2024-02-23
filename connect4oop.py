@@ -64,12 +64,12 @@ class game:
     def check_win_after_move(self, move_row, move_col, piece):
         row_count = 0
         for i in range(move_row - 3,move_row + 4):
-            if i in range(0,6) and self.board[i][move_col] == piece: row_count += 1
+            if i in range(0,NUM_ROW) and self.board[i][move_col] == piece: row_count += 1
             else: row_count = 0
             if row_count >= 4: return True
         collumn_count = 0
         for j in range(move_col - 3, move_col + 4):
-            if j in range(0,7) and self.board[move_row][j] == piece:
+            if j in range(NUM_COL) and self.board[move_row][j] == piece:
                 collumn_count += 1
                 print("im, here")
             else: collumn_count = 0 
@@ -78,14 +78,14 @@ class game:
         for k in range(-3, 4):
             i = move_row + k
             j = move_col + k 
-            if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: downrightdiag_count += 1
+            if i in range(NUM_ROW) and j in range(NUM_COL) and self.board[i][j] == piece: downrightdiag_count += 1
             else: downrightdiag_count = 0
             if downrightdiag_count >= 4: return True
         upleftdiag_count = 0
         for k in range(-3, 4):
             i = move_row - k
             j = move_col + k 
-            if i in range(0,6) and j in range(0,7) and self.board[i][j] == piece: upleftdiag_count += 1
+            if i in range(NUM_ROW) and j in range(NUM_COL) and self.board[i][j] == piece: upleftdiag_count += 1
             else: upleftdiag_count = 0
             if upleftdiag_count >= 4: return True
         return False
