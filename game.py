@@ -115,6 +115,6 @@ class game:
         nextPiece = PLAYER_PIECE
         oldPiece = AI_PIECE
         for move in moves:
-            if move in self.availableCollumns():
+            if not self.board_is_full and move in self.availableCollumns():
                 self.putGamePiece(move, nextPiece)
                 nextPiece, oldPiece = oldPiece, nextPiece
