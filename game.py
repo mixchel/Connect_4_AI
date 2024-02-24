@@ -5,6 +5,7 @@ NUM_COL = 7
 EMPTY = '-'
 PLAYER_PIECE = 'X'
 AI_PIECE = 'O'
+NUM_MOVES = NUM_ROW * NUM_COL - 1 #temporário até fazer funcionar usando as funçoes desta classe
 
 class game:
     game_winner = EMPTY
