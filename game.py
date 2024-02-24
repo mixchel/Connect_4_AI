@@ -9,6 +9,7 @@ NUM_MOVES = NUM_ROW * NUM_COL - 1 #temporário até fazer funcionar usando as fu
 
 class game:
     game_winner = EMPTY
+    board_is_full = False
     
     def __init__(self):
         self.board = np.full([NUM_ROW,NUM_COL],EMPTY)
@@ -20,10 +21,10 @@ class game:
         print(np.flip(self.board, 0))
         return
     
-    """Dado um input, verifica a função availableRows para saber se é válido.
+    """Dado um input, verifica a função availableCollumns para saber se é válido.
     Se não for pede novamente o input, do contrário usa a função putGamePiece para alterar a board."""
     def playOneTurn(self):
-        available = self.availableRows()
+        available = self.availableCollumns()
         collumn = int(input("Choose in which collumn do you wanna play: "))
         while collumn not in available:
             collumn = int(input("The collumn you selected is either full or invalid, choose another one: "))
@@ -36,10 +37,12 @@ class game:
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
         if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece
+        elif not self.availableCollumns(): board_is_full = True # Isso muda board_is_full pra True se a lista de colunas com movimentos possiveis estiver vazia
+        # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho
         return
     
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
-    def availableRows(self):
+    def availableCollumns(self):
         available = []
         for i,value in enumerate(self.board[NUM_ROW - 1]):
             if value == EMPTY: available.append(i) 
@@ -72,7 +75,7 @@ class game:
         for i in range(move_row - 3,move_row + 4):
             if i in range(0,NUM_ROW) and self.board[i][move_col] == piece: row_count += 1
             else: row_count = 0
-            if row_count >= 4: return True
+            if row_count == 4: return True
         
         #verificar se houve vitória na coluna
         collumn_count = 0
@@ -80,7 +83,7 @@ class game:
             if j in range(NUM_COL) and self.board[move_row][j] == piece:
                 collumn_count += 1
             else: collumn_count = 0 
-            if collumn_count >= 4: return True
+            if collumn_count == 4: return True
             
         #verificar se houve vitória na diagonal principal e adjacentes
         downrightdiag_count = 0
@@ -89,7 +92,7 @@ class game:
             j = move_col + k 
             if i in range(NUM_ROW) and j in range(NUM_COL) and self.board[i][j] == piece: downrightdiag_count += 1
             else: downrightdiag_count = 0
-            if downrightdiag_count >= 4: return True
+            if downrightdiag_count == 4: return True
             
         #verificar se houve vitória na diagonal secundária e adjacentes
         upleftdiag_count = 0
@@ -98,7 +101,7 @@ class game:
             j = move_col + k 
             if i in range(NUM_ROW) and j in range(NUM_COL) and self.board[i][j] == piece: upleftdiag_count += 1
             else: upleftdiag_count = 0
-            if upleftdiag_count >= 4: return True
+            if upleftdiag_count == 4: return True
         return False
     
     #função que decide quem começa o jogo
@@ -107,3 +110,11 @@ class game:
         if (who_starts != 0) and (who_starts != 1):
             self.start()
         return who_starts
+    
+    def movelist_2_board(self, moves): # assumes game starts with playerPiece
+        nextPiece = PLAYER_PIECE
+        oldPiece = AI_PIECE
+        for move in moves:
+            if move in self.availableCollumns():
+                self.putGamePiece(move, nextPiece)
+                nextPiece, oldPiece = oldPiece, nextPiece
