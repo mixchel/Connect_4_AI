@@ -98,7 +98,7 @@ class game:
     
     #função que começa o jogo
     def start(self):
-        starts = int(input("\nType 0 to begin:"))
+        starts = int(input("\nType 0 to begin: "))
         if (starts != 0):
             self.start()
         return starts
@@ -174,22 +174,21 @@ class game:
         
     #avalia todos as posições para descobrir se há vencedor
     def evaluate_all(self):
-        winner = self.ganho()
+        if self.terminal():
+            return self.utility()
         
+        """winner = self.ganho()
         if winner == PLAYER_PIECE:
             return 512
         elif winner == AI_PIECE: 
             return -512
-        elif self.board_is_full:
-            return 0
-        
-        #elif self.terminal(): 
-        # return 0
+        elif self.terminal(): 
+            return 0"""
         
         sum = 0
-        if self.player() == PLAYER_PIECE:
+        if self.player_() == PLAYER_PIECE:
             sum = sum + 16
-        elif self.player() == AI_PIECE:
+        elif self.player_() == AI_PIECE:
             sum = sum - 16
         for segment in self.get_segments():
             sum = sum + self.evaluate(segment)
@@ -201,7 +200,6 @@ class game:
     def terminal(self):
         if self.ganho(): return True
         else: return self.board_is_full
-        
         """
         elif len(self.availableCollumns())==0:
             return True
@@ -219,7 +217,7 @@ class game:
         return None
     
     """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
-    Ainda não implementada."""
+    Não está em uso em outras classes."""
     def player_(self):
         if self.board_is_full: return None
         elif self.turn % 2 == 0: return PLAYER_PIECE
@@ -248,10 +246,10 @@ class game:
             return AI_PIECE
         
     def utility(self):
-        win = self.ganho()
-        if win == PLAYER_PIECE:
+        winner = self.ganho()
+        if winner == PLAYER_PIECE:
             return 512
-        elif win == AI_PIECE:
+        elif winner == AI_PIECE:
             return -512
         else:
             return 0

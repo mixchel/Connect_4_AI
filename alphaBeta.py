@@ -1,29 +1,19 @@
-"""
-TO DO:
-- função get segments a usar strings ao invés de arrays?
-- remover funções repetidas (usar funções de game ao invés destas)
-- padronizar com game e main
-- fazer funcionar lol
-"""
-
-
 from game import *
 import numpy as np
 import copy
-
 
 class alphaBeta:
     def __init__(self):
       pass
   
     def get_move(self, state, depth=5, alpha=-np.infty, beta=np.infty):
+        pl = state.player()
         if depth == 0:
             segments = state.get_segments()
             s = 0
             for segment in segments:
                 s += state.evaluate(segment)
-
-            pl = state.player()
+            
             if pl == "X":
                 s += 16
             elif pl == "O":
@@ -33,7 +23,7 @@ class alphaBeta:
         if state.terminal():
             return state.utility(), None
 
-        if state.player() == "X":
+        if pl == "X":
             v = -np.infty
             move = None
             for action in state.availableCollumns():
