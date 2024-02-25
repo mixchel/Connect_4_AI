@@ -8,7 +8,64 @@ TO DO:
 
 
 from game import *
+import numpy as np
+import copy
 
+
+class alphaBeta:
+    def __init__(self):
+      pass
+  
+    def get_move(self, state, depth=5, alpha=-np.infty, beta=np.infty):
+        if depth == 0:
+            segments = state.get_segments()
+            s = 0
+            for segment in segments:
+                s += state.evaluate(segment)
+
+            pl = state.player()
+            if pl == "X":
+                s += 16
+            elif pl == "O":
+                s -= 16
+            return s, None
+
+        if state.terminal():
+            return state.utility(), None
+
+        if state.player() == "X":
+            v = -np.infty
+            move = None
+            for action in state.availableCollumns():
+                new_state = copy.deepcopy(state)  # Assume que a classe game tem o método copy() para criar uma cópia do estado
+                new_state.putGamePiece(action, "X")
+                test = self.get_move(new_state, depth - 1, alpha, beta)[0]
+                if test > v:
+                    v = test
+                    move = action
+                if v > beta:
+                    break
+                alpha = max(alpha, v)
+            return v, move
+        else:
+            v = np.infty
+            move = None
+            for action in state.availableCollumns():
+                new_state =  copy.deepcopy(state)  # Assume que a classe game tem o método copy() para criar uma cópia do estado
+                new_state.putGamePiece(action, "O")
+                test = self.get_move(new_state, depth - 1, alpha, beta)[0]
+                if test < v:
+                    v = test
+                    move = action
+                if v < alpha:
+                    break
+                beta = min(beta, v)
+            return v, move
+
+
+
+
+"""
 class alphaBeta:
     def __init__(self):
         pass
@@ -141,14 +198,14 @@ class alphaBeta:
     def alphabeta(self, board_state, start, turn, depth, alpha, beta):
 
         """
-        Aplica o algoritmo min/max aproximado (como descrito no enunciado).
-        Aplica também alpha-betta pruning.
-        Recebe um estado de jogo, um limite máximo de profundiade e alpha beta.
-        Utiliza alpha-beta até à profundidade limite retornando uma aproximação do valor real.
-        Retorna o valor min/max e a ação correspondente.
-        Avalia automaticamente se é o max player ("X") ou min player ("O").
-        
-        """
+        #Aplica o algoritmo min/max aproximado (como descrito no enunciado).
+        #Aplica também alpha-betta pruning.
+        #Recebe um estado de jogo, um limite máximo de profundiade e alpha beta.
+        #Utiliza alpha-beta até à profundidade limite retornando uma aproximação do valor real.
+        #Retorna o valor min/max e a ação correspondente.
+        #Avalia automaticamente se é o max player ("X") ou min player ("O").
+        #
+"""
         player = self.get_turn(start,turn)
         
         novo_game = game()
@@ -208,7 +265,7 @@ class alphaBeta:
                 beta = min (beta, v)        
             return move
 
-    """Função que checa se houve vitória após cada movimento. 
+  Função que checa se houve vitória após cada movimento. 
     def get_segments(self, board_board_state):
         
         #verificar se houve vitória na row

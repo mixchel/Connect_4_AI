@@ -2,6 +2,7 @@ from game import *
 from alphaBeta import *
 from aStar import *
 from minimax import *
+from alphaBeta import *
 import os #poder usar função clear
 
 clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
@@ -18,6 +19,7 @@ while new_game == 1:
     #alpha_beta = alphaBeta() #inicia a alphaBeta AI
     a_star = aStar() #inicia a aStar AI
     mini = minimax()
+    alpha = alphaBeta()
     
     """Enquanto não houver ganhador ou der empate o jogo continua.
     O ciclo avalia quem começa e progride de acordo.
@@ -45,7 +47,9 @@ while new_game == 1:
                 #ai_move = (alpha_beta.alphabeta(novo_game.get_state(), start, turn, 5, -np.infty, np.infty))
                 #novo_game.putGamePiece(ai_move, AI_PIECE)
                 #novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
-                ai_move = mini.get_move(novo_game)[1]
+
+                #mudar o alpha por mini pra usar minimax
+                ai_move = alpha.get_move(novo_game)[1]
                 if ai_move !=None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
