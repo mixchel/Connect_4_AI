@@ -9,6 +9,7 @@ AI_PIECE = 'O'
 class game:
     game_winner = EMPTY #variáveis que controlam o fim do jogo
     board_is_full = False 
+    turn = 0
     
     def __init__(self):
         self.board = np.full([NUM_ROW,NUM_COL],EMPTY)
@@ -22,13 +23,14 @@ class game:
     def playOneTurn(self):
         available = self.availableCollumns()
         try: #error handling
-            collumn = int(input("Choose in which collumn do you wanna play: "))
+            collumn = int(input("Choose in which collumn do you wanna play or press 9 to quit: "))
         except:
             collumn = -1
-            
+        
         while collumn not in available:
+            if collumn == 9: quit() #opção para quitar
             try: #more error handlings
-                collumn = int(input("The collumn you selected is either full or invalid, choose another one: "))
+                collumn = int(input("The collumn you selected is either full or invalid, choose another one or press 9 to quit: "))
             except:
                 collumn = -1
         self.putGamePiece(collumn, PLAYER_PIECE)
@@ -170,69 +172,61 @@ class game:
             case 3: return -50
             case 4: return -512
         
-    
+    #avalia todos as posições para descobrir se há vencedor
     def evaluate_all(self):
-
-        win = self.ganho()
-        if win ==PLAYER_PIECE:
+        winner = self.ganho()
+        
+        if winner == PLAYER_PIECE:
             return 512
-        
-        elif win ==AI_PIECE:
+        elif winner == AI_PIECE: 
             return -512
-        
-        elif self.terminal():
+        elif self.board_is_full:
             return 0
         
-        s = 0
+        #elif self.terminal(): 
+        # return 0
         
-        if self.player()==PLAYER_PIECE:
-            s= s+16
-        elif self.player()==AI_PIECE:
-            s=s-16
+        sum = 0
+        if self.player() == PLAYER_PIECE:
+            sum = sum + 16
+        elif self.player() == AI_PIECE:
+            sum = sum - 16
         for segment in self.get_segments():
-            s=s+self.evaluate(segment)
-        return s
+            sum = sum + self.evaluate(segment)
+        return sum
     
 
-    # variável board_is_full tem a mesma funcionalidade
+    """Verifica se um determinado estado é um estado terminal/final 
+    (estado em que um dos jogadores ganhou ou em que não há ações possíveis)"""
     def terminal(self):
-        """"
-        Verifica se um determinado estado é um estado terminal/final 
-        (estado em que um dos jogadores ganhou ou em que não há ações possíveis)
+        if self.ganho(): return True
+        else: return self.board_is_full
         
         """
-
-        #Se houver vencedor o jogo acaba
-        if self.ganho():
-            return True
-        
-        #Se não houverem ações disponiveis o jogo acaba
         elif len(self.availableCollumns())==0:
             return True
         else:
             return False
+        """
     
+    """Recebe um estado e retorna o vencedor (no caso deste existir)"""
     def ganho(self):
-        """
-        Recebe um estado e retorna o vencedor (no caso deste existir)
-        
-        """
-
-        #Itera sobre todos os segmentos de tamanho 4 e verifica se há condição de vencedor
-        for segment in self.get_segments():
+        for segment in self.get_segments(): #Itera sobre todos os segmentos de tamanho 4
             if np.array_equal(segment, ['X', 'X', 'X', 'X']):
                 return "X"
             elif np.array_equal(segment, ['O', 'O', 'O', 'O']):
                 return "O"
         return None
     
+    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
+    Ainda não implementada."""
+    def player_(self):
+        if self.board_is_full: return None
+        elif self.turn % 2 == 0: return PLAYER_PIECE
+        else: return AI_PIECE
+    
+    """Recebe um estado e retorna o jogador nesse turno."""
     def player(self):
-        """
-        Recebe um estado e retorna o jogador nesse turno.
-
-        """
-
-
         cx = 0 #contador de X
         co = 0 #contador de O
         for i in range(6):

@@ -12,7 +12,7 @@ new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 while new_game == 1:
     #iniciando o game loop
     novo_game = game() #inicia um novo objeto game
-    turn = 0
+    novo_game.turn = 0
     clear()
     start = novo_game.start()#começa o jogo
     clear()
@@ -24,7 +24,7 @@ while new_game == 1:
     
     while novo_game.game_winner == EMPTY:
         
-        if turn % 2 == 0:
+        if novo_game.turn % 2 == 0:
             novo_game.playOneTurn()
         else:
             #ai_move = a_star.get_move(novo_game)[1] #a_star AI
@@ -35,7 +35,7 @@ while new_game == 1:
             clear()
             novo_game.drawBoard()
 
-        turn += 1 #incrementar o turno
+        novo_game.turn += 1 #incrementar o turno
 
     clear() #não importa quem jogou por último, o output é limpo e redesenhado
     novo_game.drawBoard()

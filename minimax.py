@@ -16,6 +16,7 @@ class minimax:
         state = copy.deepcopy(i_state)
         if depth == 0:
             return state.evaluate_all(), None
+        
         if state.terminal():
             return state.utility(), None
 
