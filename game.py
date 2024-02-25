@@ -118,3 +118,155 @@ class game:
             if not self.board_is_full and move in self.availableCollumns():
                 self.putGamePiece(move, nextPiece)
                 nextPiece, oldPiece = oldPiece, nextPiece
+
+    def get_segments(self):
+        segments = []
+
+        #Verifica linhas e colunas
+        for i in range(NUM_ROW):
+            line = self.board[i]
+            for j in range(4):
+                segments.append(line[j:j+4])
+            col = self.board[:,i]
+            for j in range(3):
+                segments.append(col[j:j+4])
+        
+        #Verifica a ultima coluna
+        col = self.board[:, NUM_COL-1]
+        for j in range(3):
+            segments.append(col[j:j+4])
+        
+        #Verifica as diagonais principais
+        for i in range(-2,4):
+            dia = np.diag(self.board,i)
+            for j in range(len(dia)-3):
+                segments.append(dia[j:j+4])
+        #Dá flip no array e verifica as diagonais principais do array flipado (equivalentes às diagonais perpendiculares às principais do array original)
+        state_tr = np.fliplr(self.board)
+        for i in range(-2,4):
+            dia = np.diag(state_tr,i)
+            for j in range(len(dia)-3):
+                segments.append(dia[j:j+4])
+            
+        
+        return segments
+
+    def evaluate(self, segment):
+        cx = 0
+        co = 0
+        for i in segment:
+            if i== PLAYER_PIECE:
+                cx+=1
+            elif i== AI_PIECE:
+                co+=1
+
+        # print(cx, co)
+        if (cx==0 and co==0) or (cx>0 and co>0):
+            return 0
+        elif cx == 1:
+            return 1
+        elif cx == 2:
+            return 10
+        elif cx==3:
+            return 50
+        
+        #   VERIFICAR ISTO
+        elif cx == 4:
+            return 512
+        elif co ==4:
+            return -512
+        # ---
+
+        elif co == 1:
+            return -1
+        elif co == 2:
+            return -10
+        elif co==3:
+            return -50
+        
+    def evaluate_all(self):
+
+        win = self.ganho()
+        if win ==PLAYER_PIECE:
+            return 512
+        
+        elif win ==AI_PIECE:
+            return -512
+        elif self.terminal():
+            return 0
+        s = 0
+        if self.player()==PLAYER_PIECE:
+            s= s+16
+        elif self.player()==AI_PIECE:
+            s=s-16
+        for segment in self.get_segments():
+            s=s+self.evaluate(segment)
+        return s
+    
+
+    def terminal(self):
+        """"
+        Verifica se um determinado estado é um estado terminal/final 
+        (estado em que um dos jogadores ganhou ou em que não há ações possíveis)
+        
+        """
+
+        #Se houver vencedor o jogo acaba
+        if self.ganho():
+            return True
+        
+        #Se não houverem ações disponiveis o jogo acaba
+        elif len(self.availableCollumns())==0:
+            return True
+        else:
+            return False
+    
+    def ganho(self):
+        """
+        Recebe um estado e retorna o vencedor (no caso deste existir)
+        
+        """
+
+        #Itera sobre todos os segmentos de tamanho 4 e verifica se há condição de vencedor
+        for segment in self.get_segments():
+            if np.array_equal(segment, ['X', 'X', 'X', 'X']):
+                return "X"
+            elif np.array_equal(segment, ['O', 'O', 'O', 'O']):
+                return "O"
+        return None
+    
+    def player(self):
+        """
+        Recebe um estado e retorna o jogador nesse turno.
+
+        """
+
+
+        cx = 0 #contador de X
+        co = 0 #contador de O
+        for i in range(6):
+            a = self.board[i]
+            for j in range(7):
+                b = a[j]
+                if b == PLAYER_PIECE:
+                    cx +=1
+                elif b == AI_PIECE:
+                    co +=1
+        #caso do tabuleiro estar completamente ocupado
+        if cx+co == NUM_COL*NUM_ROW:
+            return None
+        
+        #Se o número de X's for menor ou igual ao numéro de O's, então é a vez de X jogar.
+        if cx <=co:
+            return PLAYER_PIECE
+        else:
+            return AI_PIECE
+        
+    def utility(self):
+        win = self.ganho()
+        if win == PLAYER_PIECE:
+            return 512
+        elif win == AI_PIECE:
+            return -512
+        else:
+            return 0

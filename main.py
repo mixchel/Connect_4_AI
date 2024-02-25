@@ -1,6 +1,7 @@
 from game import *
 from alphaBeta import *
 from aStar import *
+from minimax import *
 import os #poder usar função clear
 
 clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
@@ -16,6 +17,7 @@ while new_game == 1:
     
     #alpha_beta = alphaBeta() #inicia a alphaBeta AI
     a_star = aStar() #inicia a aStar AI
+    mini = minimax()
     
     """Enquanto não houver ganhador ou der empate o jogo continua.
     O ciclo avalia quem começa e progride de acordo.
@@ -24,14 +26,17 @@ while new_game == 1:
         
         
         #testando se o input através de classes funciona
-        ai_move = a_star.test_move(novo_game.get_state())
-        if ai_move != None:
-            novo_game.putGamePiece(ai_move, AI_PIECE)
+        #ai_move = a_star.test_move(novo_game.get_state())
+        #if ai_move != None:
+        #    novo_game.putGamePiece(ai_move, AI_PIECE)
         """Ok, o input atraves de classes funciona, depois de muita luta a fora como consegui
         foi passando novo_game.get_state() para a classe, e devolvendo como uma variável o
         movimento que eu quero que a ai faça, o que é perfeito.
         Amanhã vou tentar implementar essa lógica na classe alphaBeta."""
         
+     
+
+
         
         if start == 0: #jogador começa
             if turn % 2 == 0:
@@ -39,7 +44,10 @@ while new_game == 1:
             else:
                 #ai_move = (alpha_beta.alphabeta(novo_game.get_state(), start, turn, 5, -np.infty, np.infty))
                 #novo_game.putGamePiece(ai_move, AI_PIECE)
-                novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
+                #novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
+                ai_move = mini.get_move(novo_game)[1]
+                if ai_move !=None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
                 novo_game.drawBoard()
 
@@ -48,7 +56,10 @@ while new_game == 1:
             if turn % 2 == 0:
                 #ai_move = (alpha_beta.alphabeta(novo_game.get_state(), start, turn, 5, -np.infty, np.infty))
                 #novo_game.putGamePiece(ai_move, AI_PIECE)
-                novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
+                #novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
+                ai_move = mini.get_move(novo_game)[1]
+                if ai_move !=None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
                 novo_game.drawBoard()
             else:
