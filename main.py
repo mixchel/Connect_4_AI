@@ -18,8 +18,8 @@ while new_game == 1:
     novo_game.drawBoard()
     
     #a_star = aStar() #inicia a aStar AI
-    #mini = minimax() #inicia a minimax AI
-    alpha = alphaBeta() #inicia a alphaBeta AI
+    mini = minimax() #inicia a minimax AI
+    #alpha = alphaBeta() #inicia a alphaBeta AI
     
     while novo_game.game_winner == EMPTY:
         
@@ -27,8 +27,8 @@ while new_game == 1:
             novo_game.playOneTurn()
         else:
             #ai_move = a_star.get_move(novo_game)[1] #a_star AI
-            #ai_move = mini.get_move(novo_game)[1] #minimax AI
-            ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
+            ai_move = mini.get_move(novo_game)[1] #minimax AI
+            #ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
             if ai_move != None:
                 novo_game.putGamePiece(ai_move,AI_PIECE)
             clear()

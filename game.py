@@ -174,25 +174,22 @@ class game:
         
     #avalia todos as posições para descobrir se há vencedor
     def evaluate_all(self):
-        if self.terminal():
-            return self.utility()
-        
-        """winner = self.ganho()
+        winner = self.ganho()
         if winner == PLAYER_PIECE:
             return 512
         elif winner == AI_PIECE: 
             return -512
-        elif self.terminal(): 
-            return 0"""
-        
-        sum = 0
-        if self.player_() == PLAYER_PIECE:
-            sum = sum + 16
-        elif self.player_() == AI_PIECE:
-            sum = sum - 16
-        for segment in self.get_segments():
-            sum = sum + self.evaluate(segment)
-        return sum
+        elif self.board_is_full: 
+            return 0
+        else:
+            sum = 0
+            if self.player_() == PLAYER_PIECE:
+                sum = sum + 16
+            elif self.player_() == AI_PIECE:
+                sum = sum - 16
+            for segment in self.get_segments():
+                sum = sum + self.evaluate(segment)
+            return sum
     
 
     """Verifica se um determinado estado é um estado terminal/final 
