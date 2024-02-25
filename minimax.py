@@ -7,8 +7,6 @@ Está com um "problema". Quando a IA sabe que já vai ganhar ela empata a vitori
 
 """
 
-
-
 class minimax:
     def __init__(self):
         pass
@@ -32,6 +30,7 @@ class minimax:
                     v = test 
                     move = action
             return v, move
+        
         else:
             v = np.infty
             move = None

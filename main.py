@@ -13,66 +13,31 @@ while new_game == 1:
     #iniciando o game loop
     novo_game = game() #inicia um novo objeto game
     turn = 0
-    start = novo_game.start() #decide quem começa
+    clear()
+    start = novo_game.start()#começa o jogo
+    clear()
     novo_game.drawBoard()
     
-    #alpha_beta = alphaBeta() #inicia a alphaBeta AI
-    a_star = aStar() #inicia a aStar AI
-    mini = minimax()
-    alpha = alphaBeta()
+    #a_star = aStar() #inicia a aStar AI
+    mini = minimax() #inicia a minimax AI
+    #alpha = alphaBeta() #inicia a alphaBeta AI
     
-    """Enquanto não houver ganhador ou der empate o jogo continua.
-    O ciclo avalia quem começa e progride de acordo.
-    Só é necessário imprimir a board para os jogos da AI, pois ela joga logo depois do player."""
     while novo_game.game_winner == EMPTY:
         
-        
-        #testando se o input através de classes funciona
-        #ai_move = a_star.test_move(novo_game.get_state())
-        #if ai_move != None:
-        #    novo_game.putGamePiece(ai_move, AI_PIECE)
-        """Ok, o input atraves de classes funciona, depois de muita luta a fora como consegui
-        foi passando novo_game.get_state() para a classe, e devolvendo como uma variável o
-        movimento que eu quero que a ai faça, o que é perfeito.
-        Amanhã vou tentar implementar essa lógica na classe alphaBeta."""
-        
-     
-
-
-        
-        if start == 0: #jogador começa
-            if turn % 2 == 0:
-                novo_game.playOneTurn()
-            else:
-                #ai_move = (alpha_beta.alphabeta(novo_game.get_state(), start, turn, 5, -np.infty, np.infty))
-                #novo_game.putGamePiece(ai_move, AI_PIECE)
-                #novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
-
-                #mudar o alpha por mini pra usar minimax
-                ai_move = alpha.get_move(novo_game)[1]
-                if ai_move !=None:
-                    novo_game.putGamePiece(ai_move,AI_PIECE)
-                clear()
-                novo_game.drawBoard()
-
-        
-        else: #a_star começa
-            if turn % 2 == 0:
-                #ai_move = (alpha_beta.alphabeta(novo_game.get_state(), start, turn, 5, -np.infty, np.infty))
-                #novo_game.putGamePiece(ai_move, AI_PIECE)
-                #novo_game.putGamePiece(0, AI_PIECE) #temporário até haver ai
-                ai_move = mini.get_move(novo_game)[1]
-                if ai_move !=None:
-                    novo_game.putGamePiece(ai_move,AI_PIECE)
-                clear()
-                novo_game.drawBoard()
-            else:
-                novo_game.playOneTurn()
+        if turn % 2 == 0:
+            novo_game.playOneTurn()
+        else:
+            #ai_move = a_star.get_move(novo_game)[1] #a_star AI
+            ai_move = mini.get_move(novo_game)[1] #minimax AI
+            #ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
+            if ai_move != None:
+                novo_game.putGamePiece(ai_move,AI_PIECE)
+            clear()
+            novo_game.drawBoard()
 
         turn += 1 #incrementar o turno
 
-    #não importa quem jogou por último, o output é limpo e redesenhado
-    clear()
+    clear() #não importa quem jogou por último, o output é limpo e redesenhado
     novo_game.drawBoard()
 
     if novo_game.game_winner == "It's a tie!": #empate

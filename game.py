@@ -5,17 +5,13 @@ NUM_COL = 7
 EMPTY = '-'
 PLAYER_PIECE = 'X'
 AI_PIECE = 'O'
-NUM_MOVES = NUM_ROW * NUM_COL - 1 #temporário até fazer funcionar usando as funçoes desta classe
 
 class game:
-    game_winner = EMPTY
-    board_is_full = False
+    game_winner = EMPTY #variáveis que controlam o fim do jogo
+    board_is_full = False 
     
     def __init__(self):
         self.board = np.full([NUM_ROW,NUM_COL],EMPTY)
-
-    def get_state(self):
-        return self.board
         
     def drawBoard(self):
         print(np.flip(self.board, 0))
@@ -25,20 +21,27 @@ class game:
     Se não for pede novamente o input, do contrário usa a função putGamePiece para alterar a board."""
     def playOneTurn(self):
         available = self.availableCollumns()
-        collumn = int(input("Choose in which collumn do you wanna play: "))
+        try: #error handling
+            collumn = int(input("Choose in which collumn do you wanna play: "))
+        except:
+            collumn = -1
+            
         while collumn not in available:
-            collumn = int(input("The collumn you selected is either full or invalid, choose another one: "))
+            try: #more error handlings
+                collumn = int(input("The collumn you selected is either full or invalid, choose another one: "))
+            except:
+                collumn = -1
         self.putGamePiece(collumn, PLAYER_PIECE)
         return
     
-    """Verifica a função nextEmptyRowinCollumn para saber qual a próxima row vazia.
-    Alterar a board dado a coluna e a qual das peças (AI ou Player) será usada e põe na row vazia."""
+    """Verifica qual a próxima row vazia e alterar a põe a peça nesta row. 
+    Checa após cada movimento a função check_win_after_move para saber se houve ganhador."""
     def putGamePiece(self, collumn, piece):
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
-        if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece
-        elif not self.availableCollumns(): board_is_full = True # Isso muda board_is_full pra True se a lista de colunas com movimentos possiveis estiver vazia
-        # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho
+        if self.check_win_after_move(piece_placement, collumn, piece): self.game_winner = piece #checar se houve ganhador
+        elif not self.availableCollumns(): board_is_full = True #se não há colunas vazias, a board está cheia
+        # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
         return
     
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
@@ -50,25 +53,12 @@ class game:
     
     """Dado uma coluna, verifica qual a próxima row vazia. Retorna o número da row."""
     def nextEmptyRowinCollumn(self, collumn):
-        #for i in range(NUM_ROW):
-        #    if self.board[i][collumn] == EMPTY:
-        #        return i
         for i,value in enumerate(self.board[:,collumn]):
             if value == EMPTY: return i
         return
-
-    # sla o que o michel queria fazer aqui
-    # def segments(self):
-    #     segmentsList = []
-    #     for row in self.board:
-    #         segmentsList.append(row)
-    #     # Coloca as linhas da matriz na lista
-    #     for row in np.transpose(self.board):
-    #         segmentsList.append(row)
-    #     # Coloca as linhas da transposta da matriz na lista, equivalente as colunas da matriz original
     
     """Função que checa se houve vitória após cada movimento. 
-    Verifica somente os arrays que contém o a peça em [move_row, move_col]."""
+    Verifica somente os arrays que contém a peça em [move_row, move_col]."""
     def check_win_after_move(self, move_row, move_col, piece):
         #verificar se houve vitória na row
         row_count = 0
@@ -104,24 +94,27 @@ class game:
             if upleftdiag_count == 4: return True
         return False
     
-    #função que decide quem começa o jogo
+    #função que começa o jogo
     def start(self):
-        who_starts = int(input("\nType 0 to begin or 1 to go second:"))
-        if (who_starts != 0) and (who_starts != 1):
+        starts = int(input("\nType 0 to begin:"))
+        if (starts != 0):
             self.start()
-        return who_starts
+        return starts
     
-    def movelist_2_board(self, moves): # assumes game starts with playerPiece
-        nextPiece = PLAYER_PIECE
+    
+    #não está em uso ainda
+    #explicar o que faz pls
+    def movelist_2_board(self, moves):
+        nextPiece = PLAYER_PIECE #o jogo tem que começar com o player
         oldPiece = AI_PIECE
         for move in moves:
             if not self.board_is_full and move in self.availableCollumns():
                 self.putGamePiece(move, nextPiece)
                 nextPiece, oldPiece = oldPiece, nextPiece
 
+    #retorna array com todos os segmentos de 4 em todas as direções
     def get_segments(self):
         segments = []
-
         #Verifica linhas e colunas
         for i in range(NUM_ROW):
             line = self.board[i]
@@ -141,49 +134,43 @@ class game:
             dia = np.diag(self.board,i)
             for j in range(len(dia)-3):
                 segments.append(dia[j:j+4])
-        #Dá flip no array e verifica as diagonais principais do array flipado (equivalentes às diagonais perpendiculares às principais do array original)
+                
+        #Dá flip no array e verifica as diagonais principais do array flipado 
+        #(equivalentes às diagonais perpendiculares às principais do array original)
         state_tr = np.fliplr(self.board)
         for i in range(-2,4):
             dia = np.diag(state_tr,i)
             for j in range(len(dia)-3):
                 segments.append(dia[j:j+4])
-            
-        
         return segments
 
+    #avalia um segmento e retorna a sua pontuação
     def evaluate(self, segment):
-        cx = 0
-        co = 0
+        count_x = 0
+        count_o = 0
+        
         for i in segment:
             if i== PLAYER_PIECE:
-                cx+=1
+                count_x+=1
             elif i== AI_PIECE:
-                co+=1
+                count_o+=1
 
-        # print(cx, co)
-        if (cx==0 and co==0) or (cx>0 and co>0):
+        if (count_x==0 and count_o==0) or (count_x>0 and count_o>0):
             return 0
-        elif cx == 1:
-            return 1
-        elif cx == 2:
-            return 10
-        elif cx==3:
-            return 50
         
-        #   VERIFICAR ISTO
-        elif cx == 4:
-            return 512
-        elif co ==4:
-            return -512
-        # ---
-
-        elif co == 1:
-            return -1
-        elif co == 2:
-            return -10
-        elif co==3:
-            return -50
+        match count_x:
+            case 1: return 1
+            case 2: return 10
+            case 3: return 50
+            case 4: return 512
         
+        match count_o:
+            case 1: return -1
+            case 2: return -10
+            case 3: return -50
+            case 4: return -512
+        
+    
     def evaluate_all(self):
 
         win = self.ganho()
@@ -192,9 +179,12 @@ class game:
         
         elif win ==AI_PIECE:
             return -512
+        
         elif self.terminal():
             return 0
+        
         s = 0
+        
         if self.player()==PLAYER_PIECE:
             s= s+16
         elif self.player()==AI_PIECE:
@@ -204,6 +194,7 @@ class game:
         return s
     
 
+    # variável board_is_full tem a mesma funcionalidade
     def terminal(self):
         """"
         Verifica se um determinado estado é um estado terminal/final 
