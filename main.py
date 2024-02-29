@@ -3,8 +3,13 @@ from aStar import *
 from minimax import *
 from alphaBeta import *
 import os #poder usar função clear
+from sys import platform
 
-clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+if platform == "win32":
+    clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+else:
+    clear = lambda: os.system('clear')
+
 new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 
 

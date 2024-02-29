@@ -217,10 +217,9 @@ class game:
 
     # avalia todos as posições para descobrir se há vencedor
     def evaluate_all(self):
-        winner = self.checkwin_wholeboard()
-        if winner == PLAYER_PIECE:
+        if self.game_winner == PLAYER_PIECE:
             return 512
-        elif winner == AI_PIECE:
+        elif self.game_winner == AI_PIECE:
             return -512
         elif self.board_is_full:
             return 0
@@ -238,7 +237,7 @@ class game:
     (estado em que um dos jogadores ganhou ou em que não há ações possíveis)"""
 
     def terminal(self):
-        if self.checkwin_wholeboard():
+        if self.game_winner == PLAYER_PIECE or self.game_winner == AI_PIECE:
             return True
         else:
             return self.board_is_full
@@ -296,10 +295,9 @@ class game:
             return AI_PIECE
 
     def utility(self):
-        winner = self.checkwin_wholeboard()
-        if winner == PLAYER_PIECE:
+        if self.game_winner == PLAYER_PIECE:
             return 512
-        elif winner == AI_PIECE:
+        elif self.game_winner == AI_PIECE:
             return -512
         else:
             return 0
