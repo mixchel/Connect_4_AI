@@ -16,7 +16,12 @@ class game:
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
 
     def drawBoard(self):
-        print(np.flip(self.board, 0))
+        for i in range(7): print(i, end=" ") #imprime os numeros das colunas
+        print() # coloca newline
+        for line in np.flip(self.board, 0):
+            for piece in line:
+                print(piece, end=" ")
+            print()# coloca newline
         return
 
     """Dado um input, verifica a função availableCollumns para saber se é válido.
