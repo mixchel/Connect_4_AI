@@ -1,10 +1,9 @@
-#Temos que implementar na aula prática, só estou fazendo testes
-#classes em Java era mais fácil....
-
 from game import *
 import copy
 import numpy as np
-class aStar:
+
+
+class aStar_rules:
     def __init__(self) -> None:
         pass
     
@@ -13,8 +12,15 @@ class aStar:
     o que quer dizer "por um x na ultima coluna"
     """
     def get_move(self, state):
+
         actions = []
         heuristic = []
+        for action in state.availableCollumns():
+            new_state = copy.deepcopy(state)
+            new_state.putGamePiece(action, "X")
+            if new_state.game_winner != EMPTY:
+                return action
+            
         for action in state.availableCollumns():
             new_state = copy.deepcopy(state)
             new_state.putGamePiece(action, "O")
@@ -23,5 +29,3 @@ class aStar:
         index_min = np.argmin(heuristic)
         print(heuristic, actions)
         return actions[index_min]
-
-
