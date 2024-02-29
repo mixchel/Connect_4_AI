@@ -13,36 +13,55 @@ else:
 
 new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 
+a_star = aStar() #inicia a aStar AI
+mini = minimax() #inicia a minimax AI
+alpha = alphaBeta() #inicia a alphaBeta AI
+a_star_rules = aStar_rules() #inicia aStar_Rules AI
 
 while new_game == 1:
     #iniciando o game loop
     novo_game = game() #inicia um novo objeto game
     novo_game.turn = 0
     clear()
-    start = novo_game.start()#começa o jogo
-    clear()
-    novo_game.drawBoard()
+    start = novo_game.start_ai()#começa o jogo
     
-    #a_star = aStar() #inicia a aStar AI
-    #mini = minimax() #inicia a minimax AI
-    #alpha = alphaBeta() #inicia a alphaBeta AI
-    a_star_rules = aStar_rules()
-    
-    while novo_game.game_winner == EMPTY:
-        
-        if novo_game.turn % 2 == 0:
-            novo_game.playOneTurn()
-        else:
-            #ai_move = a_star.get_move(novo_game)[1] #a_star AI
-            ai_move = a_star_rules.get_move(novo_game) #a_star AI
-            #ai_move = mini.get_move(novo_game)[1] #minimax AI
-            #ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
-            if ai_move != None:
-                novo_game.putGamePiece(ai_move,AI_PIECE)
-            clear()
-            novo_game.drawBoard()
+    if start == 0:
+        while novo_game.game_winner == EMPTY:
+            if novo_game.turn % 2 == 0:
+                novo_game.playOneTurn()
+            else:
+                ai_move = a_star.get_move(novo_game)[1] #a_star AI
+                #ai_move = a_star_rules.get_move(novo_game)[1] #a_star_rules AI
+                if ai_move != None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
+                clear()
+                novo_game.drawBoard()
+            novo_game.turn += 1 #incrementar o turno
 
-        novo_game.turn += 1 #incrementar o turno
+    elif (start == 1):
+        while novo_game.game_winner == EMPTY:      
+            if novo_game.turn % 2 == 0:
+                novo_game.playOneTurn()
+            else:
+                ai_move = mini.get_move(novo_game)[1] #minimax AI
+                if ai_move != None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
+                clear()
+                novo_game.drawBoard()
+            novo_game.turn += 1 #incrementar o turno
+
+    else:
+        while novo_game.game_winner == EMPTY:      
+            if novo_game.turn % 2 == 0:
+                novo_game.playOneTurn()
+            else:
+                ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
+                if ai_move != None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
+                clear()
+                novo_game.drawBoard()
+            novo_game.turn += 1 #incrementar o turno
+
 
     clear() #não importa quem jogou por último, o output é limpo e redesenhado
     novo_game.drawBoard()

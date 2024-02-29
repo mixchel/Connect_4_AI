@@ -138,10 +138,10 @@ class game:
         return False
 
     # função que começa o jogo
-    def start(self):
-        starts = int(input("\nType 0 to begin: "))
-        if starts != 0:
-            self.start()
+    def start_ai(self):
+        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta: "))
+        if starts not in range(3):
+            self.start_ai()
         return starts
 
     # não está em uso ainda
