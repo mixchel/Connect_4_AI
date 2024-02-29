@@ -8,9 +8,9 @@ from sys import platform
 import cProfile
 
 if platform == "win32":
-    clear = lambda: None #limpar o terminal do Windows; os.system('clear') para o Linux
+    clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
 else:
-    clear = lambda: None('clear')
+    clear = lambda: os.system('clear')
 
 def main():
     new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
@@ -19,7 +19,7 @@ def main():
     while new_game == 1: #Jogo contra A*
         #iniciando o game loop
         novo_game = game() #inicia um novo objeto game
-        novo_game.turn = 0
+        #novo_game.turn = 0
         clear()
         start = novo_game.start_ai()#começa o jogo
         
@@ -32,7 +32,8 @@ def main():
             novo_game.drawBoard()
             
             while novo_game.game_winner == EMPTY:
-                if novo_game.turn % 2 == 0:
+                if novo_game.player() == PLAYER_PIECE:
+                #if novo_game.turn % 2 == 0:
                     novo_game.playOneTurn()
                 else:
                     #ai_move = a_star.get_move(novo_game)[1] #a_star AI
@@ -42,7 +43,7 @@ def main():
                     clear()
                     print("vs A*")
                     novo_game.drawBoard()
-                novo_game.turn += 1 #incrementar o turno
+                #novo_game.turn += 1 #incrementar o turno
 
         elif (start == 1):
             mini = minimax() #inicia a minimax AI
@@ -52,7 +53,8 @@ def main():
             novo_game.drawBoard()
             
             while novo_game.game_winner == EMPTY:      
-                if novo_game.turn % 2 == 0:
+                if novo_game.player() == PLAYER_PIECE:
+                #if novo_game.turn % 2 == 0:
                     novo_game.playOneTurn()
                 else:
                     ai_move = mini.get_move(novo_game)[1] #minimax AI
@@ -61,7 +63,7 @@ def main():
                     clear()
                     print("vs MiniMax")
                     novo_game.drawBoard()
-                novo_game.turn += 1 #incrementar o turno
+                #novo_game.turn += 1 #incrementar o turno
 
         else: #jogo contra alphaBeta
             alpha = alphaBeta() #inicia a alphaBeta AI
@@ -70,8 +72,9 @@ def main():
             print("vs AlphaBeta")
             novo_game.drawBoard()
             
-            while novo_game.game_winner == EMPTY:      
-                if novo_game.turn % 2 == 0:
+            while novo_game.game_winner == EMPTY:
+                if novo_game.player() == PLAYER_PIECE:      
+                #if novo_game.turn % 2 == 0:
                     novo_game.playOneTurn()
                 else:
                     ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
@@ -80,7 +83,7 @@ def main():
                     clear()
                     print("vs AlphaBeta")
                     novo_game.drawBoard()
-                novo_game.turn += 1 #incrementar o turno
+                #novo_game.turn += 1 #incrementar o turno
 
 
         clear() #não importa quem jogou por último, o output é limpo e redesenhado

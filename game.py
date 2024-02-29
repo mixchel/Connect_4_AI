@@ -10,7 +10,7 @@ AI_PIECE = "O"
 class game:
     game_winner = EMPTY  # variáveis que controlam o fim do jogo
     board_is_full = False
-    turn = 0
+    #turn = 0
 
     def __init__(self):
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
@@ -230,9 +230,9 @@ class game:
             return 0
         else:
             sum = 0
-            if self.player_() == PLAYER_PIECE:
+            if self.player() == PLAYER_PIECE:
                 sum = sum + 16
-            elif self.player_() == AI_PIECE:
+            elif self.player() == AI_PIECE:
                 sum = sum - 16
             for segment in self.get_segments():
                 sum = sum + self.evaluate(segment)
@@ -268,13 +268,14 @@ class game:
     """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
     Não está em uso em outras classes."""
 
+    """    
     def player_(self):
         if self.board_is_full:
             return None
         elif self.turn % 2 == 0:
             return PLAYER_PIECE
         else:
-            return AI_PIECE
+            return AI_PIECE"""
 
     """Recebe um estado e retorna o jogador nesse turno."""
 
