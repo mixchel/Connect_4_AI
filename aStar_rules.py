@@ -19,7 +19,7 @@ class aStar_rules:
             new_state = copy.deepcopy(state)
             new_state.putGamePiece(action, "X")
             if new_state.game_winner != EMPTY:
-                return action
+                return heuristic, action
             
         for action in state.availableCollumns():
             new_state = copy.deepcopy(state)
