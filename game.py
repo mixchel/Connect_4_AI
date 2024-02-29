@@ -54,7 +54,7 @@ class game:
         if self.check_win_after_move(piece_placement, collumn, piece):
             self.game_winner = piece  # checar se houve ganhador
         elif not self.availableCollumns():
-            board_is_full = True  # se não há colunas vazias, a board está cheia
+            self.board_is_full = True  # se não há colunas vazias, a board está cheia
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
         return
 
