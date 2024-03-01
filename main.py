@@ -3,6 +3,7 @@ from aStar import *
 from minimax import *
 from alphaBeta import *
 from aStar_rules import *
+from aStar_depth import *
 import os #poder usar função clear
 from sys import platform
 
@@ -23,7 +24,8 @@ while new_game == 1: #Jogo contra A*
     
     if start == 0:
         #a_star = aStar() #inicia a aStar AI
-        a_star_rules = aStar_rules() #inicia aStar_Rules AI
+        #a_star_rules = aStar_rules() #inicia aStar_Rules AI
+        a_star_depth = aStar_depth()
         
         clear()
         print("vs A*")
@@ -35,7 +37,8 @@ while new_game == 1: #Jogo contra A*
                 novo_game.playOneTurn()
             else:
                 #ai_move = a_star.get_move(novo_game)[1] #a_star AI
-                ai_move = a_star_rules.get_move(novo_game)[1] #a_star_rules AI
+                #ai_move = a_star_rules.get_move(novo_game)[1] #a_star_rules AI
+                ai_move = a_star_depth.get_move(novo_game, 3)
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
