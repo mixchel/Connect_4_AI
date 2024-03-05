@@ -1,18 +1,20 @@
 import numpy as np
+from dictgeneration import gen_dict
 
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = "-"
 PLAYER_PIECE = "X"
 AI_PIECE = "O"
+dict = gen_dict()
 
 
 class game:
-    game_winner = EMPTY  # variáveis que controlam o fim do jogo
-    board_is_full = False
     #turn = 0
-
     def __init__(self):
+        self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
+        self.board_is_full = False
+        self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
 
     def drawBoard(self):
@@ -61,6 +63,7 @@ class game:
         elif not self.availableCollumns():
             self.board_is_full = True  # se não há colunas vazias, a board está cheia
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
+        self.update_heuristics(piece_placement, collumn)
         return
 
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
@@ -187,6 +190,12 @@ class game:
         return segments
 
     # avalia um segmento e retorna a sua pontuação
+    def update_heuristics(self,move_row,move_col):
+        indexes = dict[(move_row,move_col)]
+        segments = self.get_segments() # Temporario, ideal é fazer uma função que gera apenas os segmentos necessarios
+        for i in indexes:
+            self.segment_heuristics[i] = self.evaluate(segments[i])
+
     def evaluate(self, segment):
         count_x = 0
         count_o = 0
