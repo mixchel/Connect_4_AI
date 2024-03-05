@@ -8,11 +8,11 @@ AI_PIECE = "O"
 
 
 class game:
-    game_winner = EMPTY  # variáveis que controlam o fim do jogo
-    board_is_full = False
     #turn = 0
 
     def __init__(self):
+        self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
+        self.board_is_full = False
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
 
     def drawBoard(self):
