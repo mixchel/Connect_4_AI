@@ -35,14 +35,19 @@ def gen_dict():
     board = [[f"{i},{j}" for j in range(7)]for i in range(6)]
     board = np.array(board)
     segments = get_segments(board)
-    dict = {}
+    index_dict = {}
+    position_dict = {}
     for j in range(7):
         for i in range(6):
             temp = []
             for z,segment in enumerate(segments):
                 if f"{i},{j}" in segment:
                     temp.append(z)
-                dict[(i,j)] = temp
-    return dict
-dict = gen_dict()
-print(dict[(1,2)])
+                index_dict[(i,j)] = temp
+                position_dict[(i,j)] = [[tuple(map(int, pos.split(","))) for pos in segments[index]] for index in temp]
+                #position_dict[(i,j)] = [segments[index] for index in temp]
+    return index_dict,position_dict
+board = [[f"{i},{j}" for j in range(7)]for i in range(6)]
+board = np.array(board)
+segments = get_segments(board)
+#index_dict, position_dict = gen_dict()

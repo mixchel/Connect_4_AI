@@ -7,7 +7,7 @@ NUM_COL = 7
 EMPTY = "-"
 PLAYER_PIECE = "X"
 AI_PIECE = "O"
-dict,pos_dict = gen_dict()
+dict = gen_dict()
 
 
 class game:
@@ -190,7 +190,38 @@ class game:
                 segments.append(dia[j : j + 4])
         return segments
     def segments_that_intersect(self, move_row, move_col):
-        segments = [[self.board[pos[0],pos[1]] for pos in list] for list in pos_dict[(move_row,move_col)]]
+        segments = []
+        line = self.board[move_row]
+        segments += segmentate(line)
+        col = self.board[: , move_col]
+        segments += segmentate(col)
+        #maindiagonal
+        if (move_row > move_col):
+            i = move_row - move_col
+            j = 0
+        else:
+            i = 0
+            j = move_col - move_row
+        maindiag = []
+        for k in range(-3, 4):
+            i = move_row + k
+            j = move_col + k
+            if (
+                i in range(NUM_ROW)
+                and j in range(NUM_COL)
+            ):
+                maindiag.append(self.board[i,j])
+        segments += segmentate(maindiag)
+        seconddiag = []
+        for k in range(-3, 4):
+            i = move_row - k
+            j = move_col + k
+            if (
+                i in range(NUM_ROW)
+                and j in range(NUM_COL)
+            ): 
+                seconddiag.append(self.board[i,j])
+        segments += segmentate(seconddiag)
         return segments
 
     # avalia um segmento e retorna a sua pontuação
