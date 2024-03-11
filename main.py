@@ -4,6 +4,7 @@ from minimax import *
 from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
+from mtcs2 import *
 import os #poder usar função clear
 from sys import platform
 
@@ -65,6 +66,26 @@ while new_game == 1: #Jogo contra A*
                 print("vs MiniMax")
                 novo_game.drawBoard()
             #novo_game.turn += 1 #incrementar o turno
+                
+    elif (start == 3):
+        mcts = MonteCarloTreeSearch() #inicia a minimax AI
+        
+        clear()
+        print("vs MCTS")
+        novo_game.drawBoard()
+        
+        while novo_game.game_winner == EMPTY:
+            if novo_game.player() == PLAYER_PIECE:   
+            #if novo_game.turn % 2 == 0:
+                novo_game.playOneTurn()
+            else:
+                ai_move = mcts.get_move(novo_game) #minimax AI
+                if ai_move != None:
+                    novo_game.putGamePiece(ai_move,AI_PIECE)
+                #clear()
+                print("vs MCTS")
+                novo_game.drawBoard()
+            #novo_game.turn += 1 #incrementar o turno
 
     else: #jogo contra alphaBeta
         alpha = alphaBeta() #inicia a alphaBeta AI
@@ -87,7 +108,7 @@ while new_game == 1: #Jogo contra A*
             #novo_game.turn += 1 #incrementar o turno
 
 
-    clear() #não importa quem jogou por último, o output é limpo e redesenhado
+    #clear() #não importa quem jogou por último, o output é limpo e redesenhado
     novo_game.drawBoard()
 
     if start == 0 and novo_game.game_winner == 'O':

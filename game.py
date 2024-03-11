@@ -17,6 +17,7 @@ class game:
         self.board_is_full = False
         self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
+        self.last_move = None
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -65,6 +66,7 @@ class game:
             self.board_is_full = True  # se não há colunas vazias, a board está cheia
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
         self.update_heuristics(piece_placement, collumn)
+        self.last_move = collumn
         return
 
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
