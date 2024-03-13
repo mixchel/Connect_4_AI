@@ -68,7 +68,8 @@ while new_game == 1: #Jogo contra A*
             #novo_game.turn += 1 #incrementar o turno
                 
     elif (start == 3):
-        mcts = MonteCarloTreeSearch() #inicia a minimax AI
+        print("Starting game against MCTS")
+        mcts = MonteCarloTreeSearch() #inicia a Monte Carlo Tree Search AI
         
         clear()
         print("vs MCTS")
@@ -76,16 +77,14 @@ while new_game == 1: #Jogo contra A*
         
         while novo_game.game_winner == EMPTY:
             if novo_game.player() == PLAYER_PIECE:   
-            #if novo_game.turn % 2 == 0:
                 novo_game.playOneTurn()
             else:
                 ai_move = mcts.get_move(novo_game) #minimax AI
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
-                #clear()
-                print("vs MCTS")
+                print("MCTS played")
                 novo_game.drawBoard()
-            #novo_game.turn += 1 #incrementar o turno
+
 
     else: #jogo contra alphaBeta
         alpha = alphaBeta() #inicia a alphaBeta AI
@@ -117,6 +116,8 @@ while new_game == 1: #Jogo contra A*
         print("\nMini-Max Won!")
     elif start == 2 and novo_game.game_winner == 'O':
         print("\nAlphaBeta Won!") #vitória
+    elif start==3 and novo_game.game_winner == "O":
+        print("\n MCTS Won!")
     elif novo_game.game_winner == 'X':
             print("\nX Won!")
     else:

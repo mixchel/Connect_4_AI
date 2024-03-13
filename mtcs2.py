@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 class MonteCarloTreeSearch:
-    def __init__(self, exploration_weight=100, num_simulations=1000):
+    def __init__(self, exploration_weight=10, num_simulations=1000):
         self.exploration_weight = exploration_weight
         self.num_simulations = num_simulations
 
@@ -22,12 +22,9 @@ class MonteCarloTreeSearch:
 
 
     def explore(self, node):
-        # Print node for debugging (optional)
-        # print(f"Root node: {node}")
-
         current = node
 
-        while current.child:
+        while current.child and not current.state.terminal():
             child = current.child
             max_U = max(c.getUCB(self.exploration_weight) for c in child.values())
             actions = [a for a, c in child.items() if c.getUCB(self.exploration_weight) == max_U]
@@ -36,15 +33,16 @@ class MonteCarloTreeSearch:
             action = random.choice(actions)
             current = child[action]
 
-        # Check if `current` is not None before accessing attributes
         if current is not None:
-            if current.visits < 1:
-                current.total_value = current.total_value + self.rollout(current)
+            if current.state.terminal():
+                current.total_value += self.rollout(current)
             else:
-                self.create_child(current)
-                if current.child:
-                    current = random.choice(list(current.child.values()))
-                    # Update total_value by adding rollout value
+                if current.visits < 1:
+                    current.total_value += self.rollout(current)
+                else:
+                    self.create_child(current)
+                    while current.child:  # Continue explorando até encontrar um nó terminal ou sem filhos
+                        current = random.choice(list(current.child.values()))
                     current.total_value += self.rollout(current)
 
         current.visits += 1
@@ -52,14 +50,14 @@ class MonteCarloTreeSearch:
 
     
     def backpropagate(self, node):
-        parent= node
-        while parent.parent :
-            parent = parent.parent
-            parent.visits +=1
-            parent.total_value += node.total_value
+        current = node
+        while current.parent:
+            current = current.parent
+            current.visits += 1
+            current.total_value += node.total_value
 
 
-            
+
     def rollout(self, node):
         new_game = copy.deepcopy(node.state)
         while not new_game.terminal():
@@ -70,7 +68,7 @@ class MonteCarloTreeSearch:
         winner = new_game.game_winner
         #print(f"Rollout Winner: {winner}")  # Added line
         if winner =="O":
-            return 1
+            return 10
         if winner == "X":
             return 0
         else:
@@ -92,9 +90,12 @@ class MonteCarloTreeSearch:
         
         # Imprimir o total_value e as visitas para cada nó filho do nó raiz
         print("Total Value and Visits for Children of Root:")
+        hjh=0
         for action, child_node in node.child.items():
             print(f"Action: {action}, Total Value: {child_node.total_value}, Visits: {child_node.visits}, Coiso: {child_node.total_value/child_node.visits}")
-
+            hjh = hjh + child_node.visits
+        print(hjh)
+        
         # Rastreia a ação que levou ao melhor nó filho
         for action, child_node in node.child.items():
             if child_node == best_child:
