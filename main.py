@@ -1,19 +1,16 @@
 from game import *
-from aStar import *
-from minimax import *
-from alphaBeta import *
-from aStar_rules import *
-from aStar_depth import *
+from ai_aStar import *
+from ai_miniMax import *
+from ai_alphaBeta import *
 import os #poder usar função clear
 from sys import platform
 
-if platform == "win32":
-    clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
-else:
-    clear = lambda: os.system('clear')
-
+clear = lambda: None
 new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
-
+def show_heuristics(dgame):
+    old = [dgame.evaluate(segment) for segment in dgame.get_segments()]
+    print(old)
+    print(dgame.segment_heuristics)
 
 while new_game == 1: #Jogo contra A*
     #iniciando o game loop
@@ -23,9 +20,7 @@ while new_game == 1: #Jogo contra A*
     start = novo_game.start_ai()#começa o jogo
     
     if start == 0:
-        #a_star = aStar() #inicia a aStar AI
-        #a_star_rules = aStar_rules() #inicia aStar_Rules AI
-        a_star_depth = aStar_depth()
+        aStar = ai_aStar() #inicia a aStar AI
         
         clear()
         print("vs A*")
@@ -36,18 +31,17 @@ while new_game == 1: #Jogo contra A*
             #if novo_game.turn % 2 == 0:
                 novo_game.playOneTurn()
             else:
-                #ai_move = a_star.get_move(novo_game)[1] #a_star AI
-                #ai_move = a_star_rules.get_move(novo_game)[1] #a_star_rules AI
-                ai_move = a_star_depth.get_move(novo_game, 3)
+                ai_move = aStar.get_move(novo_game)[1] #a_star AI
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
                 print("vs A*")
                 novo_game.drawBoard()
+                show_heuristics(novo_game)
             #novo_game.turn += 1 #incrementar o turno
 
     elif (start == 1):
-        mini = minimax() #inicia a minimax AI
+        mini = ai_miniMax() #inicia a minimax AI
         
         clear()
         print("vs MiniMax")
@@ -67,7 +61,7 @@ while new_game == 1: #Jogo contra A*
             #novo_game.turn += 1 #incrementar o turno
 
     else: #jogo contra alphaBeta
-        alpha = alphaBeta() #inicia a alphaBeta AI
+        alpha = ai_alphaBeta() #inicia a alphaBeta AI
         
         clear()
         print("vs AlphaBeta")

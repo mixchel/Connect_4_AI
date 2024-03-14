@@ -1,8 +1,8 @@
 from game import *
 from aStar import *
-from minimax import *
-from alphaBeta import *
-from aStar_rules import *
+from ai_miniMax import *
+from ai_alphaBeta import *
+from ai_aStar import *
 import os #poder usar função clear
 from sys import platform
 import cProfile

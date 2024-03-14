@@ -2,7 +2,7 @@ from game import *
 import numpy as np
 import copy
 
-class alphaBeta:
+class ai_alphaBeta:
     def __init__(self):
       pass
       

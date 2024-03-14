@@ -7,12 +7,12 @@ from aStar_depth import *
 import os #poder usar função clear
 from sys import platform
 
-clear = lambda: None
+if platform == "win32":
+    clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+else:
+    clear = lambda: os.system('clear')
+
 new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
-def show_heuristics(dgame):
-    old = [dgame.evaluate(segment) for segment in dgame.get_segments()]
-    print(old)
-    print(dgame.segment_heuristics)
 
 
 while new_game == 1: #Jogo contra A*
@@ -44,7 +44,6 @@ while new_game == 1: #Jogo contra A*
                 clear()
                 print("vs A*")
                 novo_game.drawBoard()
-                show_heuristics(novo_game)
             #novo_game.turn += 1 #incrementar o turno
 
     elif (start == 1):

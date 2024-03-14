@@ -2,12 +2,7 @@ from game import *
 import numpy as np
 import copy
 
-"""
-Está com um "problema". Quando a IA sabe que já vai ganhar ela empata a vitoria. Acho que é comum, mas convem ver forma de alterar (?)
-
-"""
-
-class minimax:
+class ai_miniMax:
     def __init__(self):
         pass
 

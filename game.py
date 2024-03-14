@@ -1,6 +1,5 @@
 import numpy as np
 from dictgeneration import gen_dict
-from tools import segmentate
 
 NUM_ROW = 6
 NUM_COL = 7
@@ -140,13 +139,6 @@ class game:
             if upleftdiag_count == 4:
                 return True
         return False
-
-    # função que começa o jogo
-    def start_ai(self):
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta: "))
-        if starts not in range(3):
-            self.start_ai()
-        return starts
 
     # não está em uso ainda
     # explicar o que faz pls

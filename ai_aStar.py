@@ -3,7 +3,7 @@ import copy
 import numpy as np
 
 
-class aStar_rules:
+class ai_aStar:
     def __init__(self) -> None:
         pass
 
