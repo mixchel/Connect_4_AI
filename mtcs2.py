@@ -70,7 +70,7 @@ class MonteCarloTreeSearch:
         if winner =="O":
             return 10
         if winner == "X":
-            return 0
+            return -10
         else:
             return 0.5
 

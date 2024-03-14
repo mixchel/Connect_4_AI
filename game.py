@@ -145,8 +145,8 @@ class game:
 
     # função que começa o jogo
     def start_ai(self):
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta: "))
-        if starts not in range(3):
+        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta; 3 = MCTS: "))
+        if starts not in range(4):
             self.start_ai()
         return starts
 
