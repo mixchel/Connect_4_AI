@@ -21,7 +21,7 @@ class aStar_rules:
             new_state = copy.deepcopy(state)
             new_state.putGamePiece(action, "O")
             actions.append(action)
-            heuristic.append(new_state.evaluate_all())
+            heuristic.append(sum(new_state.segment_heuristics))
         index_min = np.argmin(heuristic)
         print(heuristic, actions)
         return heuristic, actions[index_min]

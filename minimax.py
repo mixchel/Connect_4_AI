@@ -12,10 +12,10 @@ class minimax:
         pass
 
 
-    def get_move(self, i_state, depth=3):
+    def get_move(self, i_state, depth=5):
         state = copy.deepcopy(i_state)
         if depth == 0:
-            return state.evaluate_all(), None
+            return sum(state.segment_heuristics), None
         
         if state.terminal():
             return state.utility(), None
