@@ -7,6 +7,7 @@ from aStar_depth import *
 from mtcs2 import *
 import os #poder usar função clear
 from sys import platform
+import numpy as np
 
 
 mini = minimax()
@@ -93,3 +94,5 @@ else:
         print("Jogo: ", gg, " Vencedor: ",novo_game.game_winner, " em ", q_t, " jogadas")
         q_t = 0
 print("Mini: ", mm, " Monte: ", mc)
+
+#TODO: GAURDAR OS VENCEDORES E AS JOGADAS NUMA LISTA E SALVAR ESSA LISTA COMO APPEND NUM FICHEIRO PARA FUTUROS TESTES.
