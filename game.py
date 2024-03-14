@@ -58,6 +58,13 @@ class game:
     Checa após cada movimento a função check_win_after_move para saber se houve ganhador."""
 
     def putGamePiece(self, collumn, piece):
+        available = self.availableCollumns()
+        if collumn not in available:
+            print("The last move was invalid, below is the last state of the board and the move made, the game will quit")
+            self.drawBoard()
+            print("last move = {collumn}")
+            quit()
+
         piece_placement = self.nextEmptyRowinCollumn(collumn)
         self.board[piece_placement][collumn] = piece
         if self.check_win_after_move(piece_placement, collumn, piece):
