@@ -3,114 +3,112 @@ from ai_aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
 import os #poder usar função clear
-from sys import platform
+from sys import platform #identificar plataforma
 
-clear = lambda: None
-new_game = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
+if platform == "win32":
+    clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
+else:
+    clear = lambda: os.system('clear')
 
-ai = ai_aStar()
-ai = ai_miniMax()
-ai = ai_alphaBeta()
+def clearTerminal():
+    if CLEAR_TERMINAL:
+        clear()
 
 def show_heuristics(dgame):
     old = [dgame.evaluate(segment) for segment in dgame.get_segments()]
     print(old)
     print(dgame.segment_heuristics)
 
-def aiMove():
+def playerMove(): #movimento do jogador
     novo_game.drawBoard()
-    print("Next to play: AI Name\n")
+    print("Next to play: Player\n")
+    novo_game.playOneTurn()
+    #show_heuristics(novo_game)
+    clearTerminal()
+    
+def aiMove(): #movimento da ai
+    novo_game.drawBoard()
+    print(f"Next to play: {aiName}\n")
     ai_move = ai.get_move(novo_game)[1]
     if ai_move != None:
         novo_game.putGamePiece(ai_move,AI_PIECE)
     #show_heuristics(novo_game)
-    #clear()
+    clearTerminal()
     
-def start_ai():
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta: "))
-        if starts not in range(3):
-            start_ai()
-        return starts
-    
+def start_ai(): #inicializa a AI escolhida
+    start = -1 # error handling
+    while start not in range(4):
+        try:  
+            start = int(input("\nChoose which AI to play against: 0 = A*, 1 = Mini Max, 2 = Alpha Beta, 3 = MTC: "))
+        except:
+            continue
+    match start:
+        case 0:
+            ai = ai_aStar()
+            aiName = "A*"
+        case 1:
+            ai = ai_miniMax()
+            aiName = "Mini Max"
+        case 2:
+            ai = ai_alphaBeta()
+            aiName = "Alpha Beta"
+        case 3:
+        #    ai = ai_MTC()
+        #    aiName = "MTC"
+            print("not implemented")
+            quit()
+    return ai,aiName
 
-    
+def first_player(): #decide quem vai primeiro
+    try:  # error handling
+        first = int(input("\nChoose 0 to go first or 1 to go second: "))
+    except:
+        first = -1
+    if first not in range(2):
+        first_player()
+    return first
 
 
-while new_game == 1: #Jogo contra A*
-    #iniciando o game loop
+NEW_GAME = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
+CLEAR_TERMINAL = False #define se o terminal sera limpo ou não
+
+while NEW_GAME == 1: #Iniciando o game loop
     novo_game = game() #inicia um novo objeto game
-    #novo_game.turn = 0
-    clear()
-    start = novo_game.start_ai()#começa o jogo
+    clearTerminal()
+    print("\nNew Game\n")
     
-    if start == 0:
-        aStar = ai_aStar() #inicia a aStar AI
-        
-        clear()
-        print("vs A*")
-        novo_game.drawBoard()
-        
+    start = start_ai()
+    ai = start[0]
+    aiName = start[1]
+    
+    if first_player() == 0:
+        clearTerminal()
+        playerMove() # Jogador começa
         while novo_game.game_winner == EMPTY:
             if novo_game.player() == PLAYER_PIECE:
-            #if novo_game.turn % 2 == 0:
-                novo_game.playOneTurn()
+                playerMove()
             else:
-                ai_move = aStar.get_move(novo_game)[1] #a_star AI
-                if ai_move != None:
-                    novo_game.putGamePiece(ai_move,AI_PIECE)
-                clear()
-                print("vs A*")
-                novo_game.drawBoard()
-                show_heuristics(novo_game)
-            #novo_game.turn += 1 #incrementar o turno
-
-    elif (start == 1):
-        mini = ai_miniMax() #inicia a minimax AI
-        
-        clear()
-        print("vs MiniMax")
-        novo_game.drawBoard()
-        
+                aiMove()
+    
+    else:
+        clearTerminal()
+        aiMove() #AI começa
         while novo_game.game_winner == EMPTY:
-            if novo_game.player() == PLAYER_PIECE:   
-            #if novo_game.turn % 2 == 0:
-                novo_game.playOneTurn()
-            else:
-                ai_move = mini.get_move(novo_game)[1] #minimax AI
-                if ai_move != None:
-                    novo_game.putGamePiece(ai_move,AI_PIECE)
-                clear()
-                print("vs MiniMax")
-                novo_game.drawBoard()
-            #novo_game.turn += 1 #incrementar o turno
-
-    else: #jogo contra alphaBeta
-        alpha = ai_alphaBeta() #inicia a alphaBeta AI
-        
-        #clear()
-        
-        while novo_game.game_winner == EMPTY:      
             if novo_game.player() == PLAYER_PIECE:
-                novo_game.drawBoard()
-                print("Next to play: Player\n")
-                novo_game.playOneTurn()
+                playerMove()
             else:
                 aiMove()
 
-    #clear() #não importa quem jogou por último, o output é limpo e redesenhado
+    clearTerminal()
     novo_game.drawBoard()
 
-    if start == 0 and novo_game.game_winner == 'O':
-        print("\nA* Won!")
-    elif start == 1 and novo_game.game_winner == 'O':
-        print("\nMini-Max Won!")
-    elif start == 2 and novo_game.game_winner == 'O':
-        print("\nAlphaBeta Won!") #vitória
+    if novo_game.game_winner == 'O':
+        print(f"\n{aiName} Won!")
     elif novo_game.game_winner == 'X':
             print("\nX Won!")
     else:
         print("\nIt's a tie!")
-    new_game = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
+    NEW_GAME = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
 
 quit()
 
