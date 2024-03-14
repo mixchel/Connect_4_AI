@@ -5,6 +5,7 @@ from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
 from mtcs2 import *
+import time
 import os #poder usar função clear
 from sys import platform
 
@@ -39,12 +40,14 @@ while new_game == 1: #Jogo contra A*
             else:
                 #ai_move = a_star.get_move(novo_game)[1] #a_star AI
                 #ai_move = a_star_rules.get_move(novo_game)[1] #a_star_rules AI
+                ti = time.time()
                 ai_move = a_star_depth.get_move(novo_game, 3)
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
                 print("vs A*")
                 novo_game.drawBoard()
+                print(time.time()-ti)
             #novo_game.turn += 1 #incrementar o turno
 
     elif (start == 1):
@@ -79,11 +82,13 @@ while new_game == 1: #Jogo contra A*
             if novo_game.player() == PLAYER_PIECE:   
                 novo_game.playOneTurn()
             else:
+                ti = time.time()
                 ai_move = mcts.get_move(novo_game) #minimax AI
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 print("MCTS played")
                 novo_game.drawBoard()
+                print(time.time()-ti)
 
 
     else: #jogo contra alphaBeta
@@ -98,12 +103,14 @@ while new_game == 1: #Jogo contra A*
             #if novo_game.turn % 2 == 0:
                 novo_game.playOneTurn()
             else:
-                ai_move = alpha.get_move(novo_game)[1] #alphabeta AI
+                ti = time.time()
+                ai_move = alpha.get_move(novo_game, depth=7)[1] #alphabeta AI
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 clear()
                 print("vs AlphaBeta")
                 novo_game.drawBoard()
+                print(time.time()-ti)
             #novo_game.turn += 1 #incrementar o turno
 
 
