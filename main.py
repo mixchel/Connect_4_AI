@@ -4,7 +4,7 @@ from minimax import *
 from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
-from mtcs2 import *
+from mcts import *
 import time
 import os #poder usar função clear
 from sys import platform
@@ -72,7 +72,7 @@ while new_game == 1: #Jogo contra A*
                 
     elif (start == 3):
         print("Starting game against MCTS")
-        mcts = MonteCarloTreeSearch() #inicia a Monte Carlo Tree Search AI
+        mct = MonteCarloTreeSearch() #inicia a Monte Carlo Tree Search AI
         
         clear()
         print("vs MCTS")
@@ -83,7 +83,7 @@ while new_game == 1: #Jogo contra A*
                 novo_game.playOneTurn()
             else:
                 ti = time.time()
-                ai_move = mcts.get_move(novo_game) #minimax AI
+                ai_move = mct.get_move(novo_game) #minimax AI
                 if ai_move != None:
                     novo_game.putGamePiece(ai_move,AI_PIECE)
                 print("MCTS played")

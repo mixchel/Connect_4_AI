@@ -4,7 +4,7 @@ from minimax import *
 from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
-from mtcs2 import *
+from mcts import *
 import os #poder usar função clear
 from sys import platform
 import numpy as np
