@@ -85,12 +85,12 @@ class MonteCarloTreeSearch:
 
         winner = new_game.game_winner
         #print(f"Rollout Winner: {winner}")  # Added line
-        if winner =="O":
-            return 10
-        if winner == "X":
-            return 0
-        else:
+        if winner ==self.peca:
+            return 100
+        if winner != None:
             return 0.5
+        else:
+            return 0
 
     
     def next(self, node):
@@ -101,18 +101,19 @@ class MonteCarloTreeSearch:
         return max_child, max_child.state.last_move
 
     def get_move(self, state):
+        self.peca = state.player()
         node = Node(copy.deepcopy(state))
         for i in range(self.num_simulations):
             self.explore(node)
         best_child, last_move = self.next(node)
         
         # Imprimir o total_value e as visitas para cada nó filho do nó raiz
-        print("Total Value and Visits for Children of Root:")
-        hjh=0
-        for action, child_node in node.child.items():
-            print(f"Action: {action}, Total Value: {child_node.total_value}, Visits: {child_node.visits}, Coiso: {child_node.total_value/child_node.visits}")
-            hjh = hjh + child_node.visits
-        print(hjh)
+        #print("Total Value and Visits for Children of Root:")
+        #hjh=0
+        #for action, child_node in node.child.items():
+        #    print(f"Action: {action}, Total Value: {child_node.total_value}, Visits: {child_node.visits}, Coiso: {child_node.total_value/child_node.visits}")
+        #    hjh = hjh + child_node.visits
+        #print(hjh)
         
         # Rastreia a ação que levou ao melhor nó filho
         for action, child_node in node.child.items():
