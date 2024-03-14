@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 class MonteCarloTreeSearch:
-    def __init__(self, exploration_weight=100, num_simulations=1000):
+    def __init__(self, exploration_weight=1, num_simulations=10000):
         self.exploration_weight = exploration_weight
         self.num_simulations = num_simulations
 
@@ -86,9 +86,9 @@ class MonteCarloTreeSearch:
         winner = new_game.game_winner
         #print(f"Rollout Winner: {winner}")  # Added line
         if winner ==self.peca:
-            return 100
-        if winner != None:
-            return 0.5
+            return 1
+        #if winner != None:
+        #    return 0.5
         else:
             return 0
 
