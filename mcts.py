@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import copy
+import math
 
 class MonteCarloTreeSearch:
     def __init__(self, exploration_weight=1, num_simulations=10000):
@@ -75,7 +76,7 @@ class MonteCarloTreeSearch:
             current.total_value += node.total_value
 
 
-
+    
     def rollout(self, node):
         new_game = copy.deepcopy(node.state)
         while not new_game.terminal():
@@ -138,4 +139,4 @@ class Node:
         top_node =self
         if top_node.parent:
             top_node = top_node.parent
-        return (self.total_value/self.visits) + exploration_weight * np.sqrt(np.log(top_node.visits)/self.visits)
+        return (self.total_value/self.visits) + exploration_weight * math.sqrt(math.log(top_node.visits)/self.visits)

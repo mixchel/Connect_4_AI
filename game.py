@@ -1,7 +1,7 @@
 import numpy as np
 from dictgeneration import gen_dict
 from tools import segmentate
-
+import numba as nb
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = "-"
@@ -95,7 +95,6 @@ class game:
 
     """Função que checa se houve vitória após cada movimento. 
     Verifica somente os arrays que contém a peça em [move_row, move_col]."""
-
     def check_win_after_move(self, move_row, move_col, piece):
         # verificar se houve vitória na row
         row_count = 0
@@ -168,6 +167,7 @@ class game:
                 nextPiece, oldPiece = oldPiece, nextPiece
 
     # retorna lista com todos os segmentos de 4 em todas as direções
+                
     def get_segments(self):
         segments = []
         # Verifica linhas e colunas
