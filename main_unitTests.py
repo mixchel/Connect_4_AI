@@ -13,6 +13,8 @@ from ai_alphaBeta import *
 import os #poder usar função clear
 from sys import platform #identificar plataforma
 
+#PLAYER_PIECE = "X"
+#AI_PIECE = "O"
 NEW_GAME = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 CLEAR_TERMINAL = False #define se o terminal sera limpo ou não
 
@@ -89,30 +91,24 @@ while NEW_GAME == 1: #Iniciando o game loop
     aiName = start[1]
     
     if first_player() == 0:
-        clearTerminal()
-        playerMove() # Jogador começa
-        while novo_game.game_winner == EMPTY:
-            if novo_game.player() == PLAYER_PIECE:
-                playerMove()
-            else:
-                aiMove()
-    
+        novo_game.first = PLAYER_PIECE
     else:
-        clearTerminal()
-        aiMove() #AI começa
-        while novo_game.game_winner == EMPTY:
-            if novo_game.player() == PLAYER_PIECE:
-                playerMove()
-            else:
-                aiMove()
+        novo_game.first = AI_PIECE
+        
+    clearTerminal()
+    while novo_game.game_winner == EMPTY:
+        if novo_game.player() == PLAYER_PIECE:
+            playerMove()
+        else:
+            aiMove()
 
     clearTerminal()
     novo_game.drawBoard()
 
-    if novo_game.game_winner == 'O':
+    if novo_game.game_winner == AI_PIECE:
         print(f"\n{aiName} Won!")
-    elif novo_game.game_winner == 'X':
-            print("\nX Won!")
+    elif novo_game.game_winner == PLAYER_PIECE:
+            print("\nPlayer Won!")
     else:
         print("\nIt's a tie!")
     NEW_GAME = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
