@@ -5,13 +5,14 @@ from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
 from mctsNextCheck import *
+import time
 
 import os #poder usar função clear
 from sys import platform
 import numpy as np
 import csv
 
-NUM_GAMES = 10
+NUM_GAMES = 1
 
 mini = minimax()
 mcts =MonteCarloTreeSearch()
@@ -109,22 +110,27 @@ elif lol==3:
         #novo_game.start_ai()
         q_t = 0
         act=""
+        tempos=[]
         while novo_game.terminal() == False:
             q_t = q_t+1
+            tim = time.time()
             mc_move = mcts.get_move(novo_game)
             if mc_move!= None:
                 novo_game.putGamePiece(mc_move, "X")
+                tfm = time.time()
                 act+=str(mc_move)+"-"
                         #novo_game.drawBoard()
             if novo_game.terminal():
                 break
+            tia = time.time()
             alpha_move = alpha.get_move(novo_game)[1]
             act+=str(alpha_move)+"-"
             novo_game.putGamePiece(alpha_move, "O")
+            tfa =time.time()
             #print(mc_move, alpha_move)
             #novo_game.drawBoard()
 
-
+            tempos.append((tfm-tim, tfa-tia))
 
             #novo_game.drawBoard()
         if novo_game.game_winner == "X":
@@ -132,10 +138,11 @@ elif lol==3:
         if novo_game.game_winner=="O":
             mm +=1
         print("Jogo: ", gg, " Vencedor: ",novo_game.game_winner, " em ", q_t, " jogadas")
-        saveResults([(novo_game.game_winner, q_t,act)], lol=3)
+        saveResults([(novo_game.game_winner, q_t,act, tempos)], lol=3)
         #sav_list.append((novo_game.game_winner, q_t,act))
         q_t = 0
         act=""
+        tempos=[]
         novo_game.drawBoard()
 
 
