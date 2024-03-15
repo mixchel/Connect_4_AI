@@ -1,8 +1,9 @@
+"""Main antigo, vou deletar depois que adicionar o MTCS ao main_unitTests"""
+
 from game import *
-from aStar import *
-from minimax import *
-from alphaBeta import *
-from aStar_rules import *
+from ai_aStar import *
+from ai_miniMax import *
+from ai_alphaBeta import *
 from aStar_depth import *
 from mctsNextCheck import *
 import time
@@ -51,7 +52,7 @@ while new_game == 1: #Jogo contra A*
             #novo_game.turn += 1 #incrementar o turno
 
     elif (start == 1):
-        mini = minimax() #inicia a minimax AI
+        mini = ai_miniMax() #inicia a minimax AI
         
         clear()
         print("vs MiniMax")
@@ -92,7 +93,7 @@ while new_game == 1: #Jogo contra A*
 
 
     else: #jogo contra alphaBeta
-        alpha = alphaBeta() #inicia a alphaBeta AI
+        alpha = ai_alphaBeta() #inicia a alphaBeta AI
         
         clear()
         print("vs AlphaBeta")

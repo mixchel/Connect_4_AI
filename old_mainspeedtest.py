@@ -1,3 +1,7 @@
+""" Vai ser implementado dentro de main_ unitTests"""
+
+
+"""
 from game import *
 from aStar import *
 from ai_miniMax import *
@@ -101,4 +105,4 @@ def main():
             print("\nIt's a tie!")
         new_game = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
 
-cProfile.run("main()")
+cProfile.run("main()")"""

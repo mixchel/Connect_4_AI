@@ -1,6 +1,5 @@
 """ 
 Falta ainda implementar os testes sequenciais e poder escolher a board.
-Agora a AI pode começar mas ainda está com problemas.
 Falta adicionar o arquivo do MTC e deletar o comentário em start_ai quando fizer.
 Se quiser que o terminal seja limpo durante o jogo é só mudar o valor da variável
     CLEAR_TERMINAL para True.
@@ -13,8 +12,6 @@ from ai_alphaBeta import *
 import os #poder usar função clear
 from sys import platform #identificar plataforma
 
-#PLAYER_PIECE = "X"
-#AI_PIECE = "O"
 NEW_GAME = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 CLEAR_TERMINAL = False #define se o terminal sera limpo ou não
 

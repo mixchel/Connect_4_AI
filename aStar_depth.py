@@ -1,3 +1,7 @@
+"""Ainda não está usando as mudanças no dicionário
+feitas pelo Michel."""
+
+
 import copy
 import numpy as np
 

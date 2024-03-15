@@ -1,8 +1,7 @@
 from game import *
-from aStar import *
-from minimax import *
-from alphaBeta import *
-from aStar_rules import *
+from ai_aStar import *
+from ai_miniMax import *
+from ai_alphaBeta import *
 from aStar_depth import *
 from mctsNextCheck import *
 import time
@@ -14,9 +13,9 @@ import csv
 
 NUM_GAMES = 1
 
-mini = minimax()
+mini = ai_miniMax()
 mcts =MonteCarloTreeSearch()
-alpha = alphaBeta()
+alpha = ai_alphaBeta()
 
 mc =0
 mm =0
