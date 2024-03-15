@@ -4,7 +4,7 @@ from minimax import *
 from alphaBeta import *
 from aStar_rules import *
 from aStar_depth import *
-from mcts import *
+from mctsNextCheck import *
 import time
 import os #poder usar função clear
 from sys import platform
