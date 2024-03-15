@@ -1,7 +1,5 @@
 import numpy as np
 from dictgeneration import gen_dict
-from tools import segmentate
-import numba as nb
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = "-"
@@ -18,6 +16,7 @@ class game:
         self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
+        self.first = PLAYER_PIECE #or AI_PIECE
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -148,13 +147,6 @@ class game:
             if upleftdiag_count == 4:
                 return True
         return False
-
-    # função que começa o jogo
-    def start_ai(self):
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta; 3 = MCTS: "))
-        if starts not in range(4):
-            self.start_ai()
-        return starts
 
     # não está em uso ainda
     # explicar o que faz pls
@@ -287,18 +279,6 @@ class game:
                 return "O"
         return None
 
-    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
-    Não está em uso em outras classes."""
-
-    """    
-    def player_(self):
-        if self.board_is_full:
-            return None
-        elif self.turn % 2 == 0:
-            return PLAYER_PIECE
-        else:
-            return AI_PIECE"""
-
     """Recebe um estado e retorna o jogador nesse turno."""
 
     def player(self):
@@ -316,11 +296,17 @@ class game:
         if cx + co == NUM_COL * NUM_ROW:
             return None
 
-        # Se o número de X's for menor ou igual ao numéro de O's, então é a vez de X jogar.
-        if cx <= co:
+        if cx < co:
+            return PLAYER_PIECE
+        elif cx > co:
+            return AI_PIECE
+        elif (cx == co) and (self.first == AI_PIECE):
+            return AI_PIECE
+        elif (cx == co) and (self.first == PLAYER_PIECE):
             return PLAYER_PIECE
         else:
-            return AI_PIECE
+            print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
+            quit()
 
     def utility(self):
         if self.game_winner == PLAYER_PIECE:

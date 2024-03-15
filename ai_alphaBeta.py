@@ -2,17 +2,14 @@ from game import *
 import numpy as np
 import copy
 
-class alphaBeta:
+class ai_alphaBeta:
     def __init__(self):
       pass
       
     def get_move(self, state, depth=5, alpha=-np.infty, beta=np.infty):
         pl = state.player()
         if depth == 0:
-            segments = state.get_segments()
-            s = 0
-            for segment in segments:
-                s += state.evaluate(segment)
+            s = sum(state.segment_heuristics)
             
             if pl == "X":
                 s += 16
