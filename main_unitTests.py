@@ -13,8 +13,8 @@ from ai_alphaBeta import *
 import os #poder usar função clear
 from sys import platform #identificar plataforma
 
-#PLAYER_PIECE = "X"
-#AI_PIECE = "O"
+#FST_PIECE = "X"
+#SND_PIECE = "O"
 NEW_GAME = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
 CLEAR_TERMINAL = False #define se o terminal sera limpo ou não
 
@@ -39,16 +39,16 @@ def playerMove(): #movimento do jogador
     #show_heuristics(novo_game)
     clearTerminal()
     
-def aiMove(): #movimento da ai
+def aiMove(ai_piece): #movimento da ai
     novo_game.drawBoard()
     print(f"Next to play: {aiName}\n")
     ai_move = ai.get_move(novo_game)[1]
     if ai_move != None:
-        novo_game.putGamePiece(ai_move,AI_PIECE)
+        novo_game.putGamePiece(ai_move,ai_piece)
     #show_heuristics(novo_game)
     clearTerminal()
     
-def start_ai(): #inicializa a AI escolhida
+def start_ai(is_FST_player): #inicializa a AI escolhida
     start = -1 # error handling
     while start not in range(4):
         try:  
@@ -57,13 +57,13 @@ def start_ai(): #inicializa a AI escolhida
             continue
     match start:
         case 0:
-            ai = ai_aStar()
+            ai = ai_aStar(is_FST_player)
             aiName = "A*"
         case 1:
-            ai = ai_miniMax()
+            ai = ai_miniMax(is_FST_player)
             aiName = "Mini Max"
         case 2:
-            ai = ai_alphaBeta()
+            ai = ai_alphaBeta(is_FST_player)
             aiName = "Alpha Beta"
         case 3:
         #    ai = ai_MTC()
@@ -86,28 +86,32 @@ while NEW_GAME == 1: #Iniciando o game loop
     clearTerminal()
     print("\nNew Game\n")
     
-    start = start_ai()
+    if first_player() == 0:
+        start = start_ai(False)
+        ai_piece = SND_PIECE
+        player_piece = FST_PIECE
+    else:
+        start = start_ai(True)
+        ai_piece = FST_PIECE
+        player_piece = SND_PIECE
     ai = start[0]
     aiName = start[1]
     
-    if first_player() == 0:
-        novo_game.first = PLAYER_PIECE
-    else:
-        novo_game.first = AI_PIECE
+    
         
     clearTerminal()
     while novo_game.game_winner == EMPTY:
-        if novo_game.player() == PLAYER_PIECE:
+        if novo_game.player() == player_piece:
             playerMove()
         else:
-            aiMove()
+            aiMove(ai_piece)
 
     clearTerminal()
     novo_game.drawBoard()
 
-    if novo_game.game_winner == AI_PIECE:
+    if novo_game.game_winner == ai_piece:
         print(f"\n{aiName} Won!")
-    elif novo_game.game_winner == PLAYER_PIECE:
+    elif novo_game.game_winner == player_piece:
             print("\nPlayer Won!")
     else:
         print("\nIt's a tie!")

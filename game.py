@@ -4,8 +4,8 @@ from dictgeneration import gen_dict
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = "-"
-PLAYER_PIECE = "X"
-AI_PIECE = "O"
+FST_PIECE = "X"
+SND_PIECE = "O"
 dict,pos_dict = gen_dict()
 
 
@@ -16,7 +16,7 @@ class game:
         self.board_is_full = False
         self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
-        self.first = PLAYER_PIECE #or AI_PIECE
+        self.first = FST_PIECE #or SND_PIECE
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -50,7 +50,7 @@ class game:
                 )
             except:
                 collumn = -1
-        self.putGamePiece(collumn, PLAYER_PIECE)
+        self.putGamePiece(collumn, self.player())
         return
 
     """Verifica qual a próxima row vazia e alterar a põe a peça nesta row. 
@@ -144,8 +144,8 @@ class game:
     # não está em uso ainda
     # explicar o que faz pls
     def movelist_2_board(self, moves):
-        nextPiece = PLAYER_PIECE  # o jogo tem que começar com o player
-        oldPiece = AI_PIECE
+        nextPiece = FST_PIECE  # o jogo tem que começar com o player
+        oldPiece = SND_PIECE
         for move in moves:
             if not self.board_is_full and move in self.availableCollumns():
                 self.putGamePiece(move, nextPiece)
@@ -198,9 +198,9 @@ class game:
         count_o = 0
 
         for i in segment:
-            if i == PLAYER_PIECE:
+            if i == FST_PIECE:
                 count_x += 1
-            elif i == AI_PIECE:
+            elif i == SND_PIECE:
                 count_o += 1
 
         if (count_x == 0 and count_o == 0) or (count_x > 0 and count_o > 0):
@@ -228,17 +228,17 @@ class game:
 
     # avalia todos as posições para descobrir se há vencedor
     def evaluate_all(self):
-        if self.game_winner == PLAYER_PIECE:
+        if self.game_winner == FST_PIECE:
             return 512
-        elif self.game_winner == AI_PIECE:
+        elif self.game_winner == SND_PIECE:
             return -512
         elif self.board_is_full:
             return 0
         else:
             sum = 0
-            if self.player() == PLAYER_PIECE:
+            if self.player() == FST_PIECE:
                 sum = sum + 16
-            elif self.player() == AI_PIECE:
+            elif self.player() == SND_PIECE:
                 sum = sum - 16
             for segment in self.get_segments():
                 sum = sum + self.evaluate(segment)
@@ -248,7 +248,7 @@ class game:
     (estado em que um dos jogadores ganhou ou em que não há ações possíveis)"""
 
     def terminal(self):
-        if self.game_winner == PLAYER_PIECE or self.game_winner == AI_PIECE:
+        if self.game_winner == FST_PIECE or self.game_winner == SND_PIECE:
             return True
         else:
             return self.board_is_full
@@ -265,10 +265,10 @@ class game:
         for (
             segment
         ) in self.get_segments():  # Itera sobre todos os segmentos de tamanho 4
-            if np.array_equal(segment, ["X", "X", "X", "X"]):
-                return "X"
-            elif np.array_equal(segment, ["O", "O", "O", "O"]):
-                return "O"
+            if np.array_equal(segment, [FST_PIECE, FST_PIECE, FST_PIECE, FST_PIECE]):
+                return FST_PIECE
+            elif np.array_equal(segment, [SND_PIECE, SND_PIECE, SND_PIECE, SND_PIECE]):
+                return SND_PIECE
         return None
 
     """Recebe um estado e retorna o jogador nesse turno."""
@@ -280,30 +280,30 @@ class game:
             a = self.board[i]
             for j in range(7):
                 b = a[j]
-                if b == PLAYER_PIECE:
+                if b == FST_PIECE:
                     cx += 1
-                elif b == AI_PIECE:
+                elif b == SND_PIECE:
                     co += 1
         # caso do tabuleiro estar completamente ocupado
         if cx + co == NUM_COL * NUM_ROW:
             return None
 
         if cx < co:
-            return PLAYER_PIECE
+            return FST_PIECE
         elif cx > co:
-            return AI_PIECE
-        elif (cx == co) and (self.first == AI_PIECE):
-            return AI_PIECE
-        elif (cx == co) and (self.first == PLAYER_PIECE):
-            return PLAYER_PIECE
+            return SND_PIECE
+        elif (cx == co) and (self.first == SND_PIECE):
+            return SND_PIECE
+        elif (cx == co) and (self.first == FST_PIECE):
+            return FST_PIECE
         else:
             print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
             quit()
 
     def utility(self):
-        if self.game_winner == PLAYER_PIECE:
+        if self.game_winner == FST_PIECE:
             return 512
-        elif self.game_winner == AI_PIECE:
+        elif self.game_winner == SND_PIECE:
             return -512
         else:
             return 0
