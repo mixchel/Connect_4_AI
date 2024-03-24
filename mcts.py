@@ -78,22 +78,25 @@ class MonteCarloTreeSearch:
 
     
     def rollout(self, node):
+        current_node = node
         new_game = copy.deepcopy(node.state)
-        pl= new_game.player()
+        pl = new_game.player()
+        
         while not new_game.terminal():
             action = random.choice(new_game.availableCollumns())
             new_game.putGamePiece(action, pl)
-            if pl =="X":
-                pl="O"
+            if pl == "X":
+                pl = "O"
             else:
-                pl="X"
-
+                pl = "X"
+            
+            #current_node.child.append(Node(copy.deepcopy(new_game), parent=current_node))
+            current_node.child[action] =  Node(copy.deepcopy(new_game), parent=current_node)
+            #current_node = current_node.child[action]
+        
         winner = new_game.game_winner
-        #print(f"Rollout Winner: {winner}")  # Added line
-        if winner ==self.peca:
+        if winner == self.peca:
             return 1
-        #if winner != None:
-        #    return 0.5
         else:
             return 0
 
@@ -133,7 +136,7 @@ class Node:
     def __init__(self, state, parent=None):
         self.state = copy.deepcopy(state)
         self.parent = parent
-        self.child = None
+        self.child = {}
         self.visits = 0
         self.total_value = 0
 
