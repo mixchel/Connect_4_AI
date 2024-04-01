@@ -21,8 +21,8 @@ class MCTSNode:
         self.value = self.value + v
         self.visits +=1
     
-    def add_child(self, child_state, move):
-        self.children.append(MCTSNode(child_state,self))
+    def add_child(self, child, move):
+        self.children.append(MCTSNode(child.state, parent=self))
         self.children_move.append(move)
     
 
@@ -44,7 +44,7 @@ class MonteCarloTreeSearch:
         for child in melhor.children:
             print("----", child.value, child.visits)
         print("lolada")
-        return melhor.state.state.last_move
+        return melhor.state.last_move
 
     def choose(self, node):
 
@@ -65,7 +65,7 @@ class MonteCarloTreeSearch:
         ac = random.choice(not_used)
         new = copy.deepcopy(node.state)
         new.putGamePiece(ac,new.player())
-        node.add_child(MCTSNode(new),ac )
+        node.add_child(MCTSNode(new), ac)
         return node.children[-1]
     
     def bestChild(self, node):
@@ -83,13 +83,13 @@ class MonteCarloTreeSearch:
     def rollout(self, node):
         new = node.state
         #print(node.state, new, new.state)
-        while not new.state.terminal():
+        while not new.terminal():
             new = copy.deepcopy(new)
-            possible_actions = new.state.availableCollumns()
+            possible_actions = new.availableCollumns()
             if len(possible_actions) >0:
-                new.state.putGamePiece(random.choice(possible_actions), new.state.player())
+                new.putGamePiece(random.choice(possible_actions), new.player())
         
-        if new.state.game_winner == self.peca:
+        if new.game_winner == self.peca:
             return 1
         else:
             return 0
