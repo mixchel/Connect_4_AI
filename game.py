@@ -1,12 +1,11 @@
 import numpy as np
 from dictgeneration import gen_dict
-from tools import segmentate
 NUM_ROW = 6
 NUM_COL = 7
 EMPTY = "-"
 PLAYER_PIECE = "X"
 AI_PIECE = "O"
-dict,pos_dict = gen_dict()
+index_dict,pos_dict = gen_dict()
 
 
 class game:
@@ -203,7 +202,7 @@ class game:
 
     # avalia um segmento e retorna a sua pontuação
     def update_heuristics(self,move_row,move_col):
-        indexes = dict[(move_row,move_col)]
+        indexes = index_dict[(move_row,move_col)]
         segments = self.segments_that_intersect(move_row, move_col)             
         for i in range(len(indexes)):
             self.segment_heuristics[indexes[i]] = self.evaluate(segments[i])
