@@ -39,9 +39,12 @@ class MonteCarloTreeSearch:
             front = self.choose(node)
             value = self.rollout(front)
             self.backprop(front, value)
-        melhor =  self.bestChild(node)
-        print(melhor.children)
+        #melhor =  self.bestChild(node)
+        mv = float('-inf')
         for child in node.children:
+            if child.value/child.visits > mv:
+                mv = child.value/child.visits
+                melhor = child
             print("----", child.value, child.visits, "...", child.state.last_move, child.value/child.visits)
         print("lolada")
         return melhor.state.last_move
