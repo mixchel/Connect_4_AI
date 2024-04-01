@@ -30,7 +30,7 @@ class MCTSNode:
 class MonteCarloTreeSearch:
     def __init__(self):
         self.maxIter = 10000
-        self.exploring_rate = 1.14
+        self.exploring_rate = 2
         
     def get_move(self, state):
         self.peca = state.player()
@@ -41,8 +41,8 @@ class MonteCarloTreeSearch:
             self.backprop(front, value)
         melhor =  self.bestChild(node)
         print(melhor.children)
-        for child in melhor.children:
-            print("----", child.value, child.visits)
+        for child in node.children:
+            print("----", child.value, child.visits, "...", child.state.last_move, child.value/child.visits)
         print("lolada")
         return melhor.state.last_move
 
@@ -96,7 +96,8 @@ class MonteCarloTreeSearch:
 
     def backprop(self, node, value):
         while node != None:
-            node.update(value)
+            node.value = node.value + value
+            node.visits = node.visits +1
             node = node.parent
         
         return 
