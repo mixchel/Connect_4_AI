@@ -29,7 +29,7 @@ class MCTSNode:
     
 
 
-class MonteCarloTreeSearch:
+class MonteCarloTreeSearch_Mod:
     def __init__(self, maxIter=100000, exploring_rate=11):
         self.maxIter = maxIter
         self.exploring_rate = exploring_rate

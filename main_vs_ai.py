@@ -2,6 +2,7 @@ from game import *
 from ai_aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
+from ai_mcts import *
 from ai_mcts_test import *
 import time #calcular tempo de execução
 import os #poder usar função clear
@@ -23,19 +24,17 @@ def aiMove_1(): #movimento da ai 1
     ai_move = ai_1.get_move(novo_game)[1]
     if ai_move != None:
         novo_game.putGamePiece(ai_move,PLAYER_PIECE)
-        print("||"*10)
 
 def aiMove_2(): #movimento da ai 2
     ai_move = ai_2.get_move(novo_game)[1]
     if ai_move != None:
         novo_game.putGamePiece(ai_move,AI_PIECE)
-        print(ai_move)
-        print("||"*10)
+        
 def start_ai(): #inicializa a AI 1
     start = -1 # error handling
-    while start not in range(4):
+    while start not in range(5):
         try:  
-            start = int(input("\nChoose the AI => 0 = A*, 1 = Mini Max, 2 = Alpha Beta, 3 = MTC: "))
+            start = int(input("\nChoose the AI => 0 = A*, 1 = Mini Max, 2 = Alpha Beta, 3 = MCTS, 4 = MCTS_Mod: "))
         except:
             continue
     match start:
@@ -50,7 +49,10 @@ def start_ai(): #inicializa a AI 1
             aiName = "Alpha Beta"
         case 3:
             ai = MonteCarloTreeSearch()
-            aiName = "MTC"
+            aiName = "MCTS"
+        case 4:
+            ai = MonteCarloTreeSearch_Mod()
+            aiName = "MCTS_Mod"
     return ai,aiName
 
 #-------- Game Loop --------
@@ -95,5 +97,3 @@ for i in range(1, NUM_GAMES + 1):
 print(f"\nResult:\n{ai_1_Name}: {ai_1_wins} vs {ai_2_Name}: {ai_2_wins}")
     
 quit()
-
-

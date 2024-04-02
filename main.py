@@ -2,13 +2,14 @@ from game import *
 from ai_aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
+from ai_mcts import *
 from ai_mcts_test import *
 import time #calcular tempo de execução
 import os #poder usar função clear
 from sys import platform #identificar plataforma
 
 NEW_GAME = 1 #inicializa um novo jogo, e permite resetar (1) ou quitar (0)
-CLEAR_TERMINAL = False #define se o terminal sera limpo ou não
+CLEAR_TERMINAL = True #define se o terminal sera limpo ou não
 
 if platform == "win32":
     clear = lambda: os.system('cls') #limpar o terminal do Windows; os.system('clear') para o Linux
@@ -39,12 +40,12 @@ def aiMove(): #movimento da ai
         novo_game.putGamePiece(ai_move,AI_PIECE)
     #show_heuristics(novo_game)
     clearTerminal()
-    
-def start_ai(): #inicializa a AI escolhida
+
+def start_ai(): #inicializa a AI 1
     start = -1 # error handling
-    while start not in range(4):
+    while start not in range(5):
         try:  
-            start = int(input("\nChoose which AI to play against: 0 = A*, 1 = Mini Max, 2 = Alpha Beta, 3 = MTC: "))
+            start = int(input("\nChoose the AI => 0 = A*, 1 = Mini Max, 2 = Alpha Beta, 3 = MCTS:, 4 = MCTS_Mod: "))
         except:
             continue
     match start:
@@ -59,8 +60,10 @@ def start_ai(): #inicializa a AI escolhida
             aiName = "Alpha Beta"
         case 3:
             ai = MonteCarloTreeSearch()
-            #ai = ai_MTC()
-            aiName = "MTC"
+            aiName = "MCTS"
+        case 4:
+            ai = MonteCarloTreeSearch_Mod()
+            aiName = "MCTS_Mod"
     return ai,aiName
 
 def first_player(): #decide quem vai primeiro
@@ -80,7 +83,7 @@ while NEW_GAME == 1: #Iniciando o game loop
     start = start_ai()
     ai = start[0]
     aiName = start[1]
-    if aiName == "MTC":
+    if aiName == "MCTS":
         novo_game = game(calculate_heuristics=False)
     else:
         novo_game = game()
@@ -111,5 +114,4 @@ while NEW_GAME == 1: #Iniciando o game loop
     NEW_GAME = int(input("\nType 0 to quit or 1 to play again: ")) #escolher se vai haver novo jogo
 
 quit()
-
 
