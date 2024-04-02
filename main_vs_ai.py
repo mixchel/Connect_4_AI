@@ -69,7 +69,7 @@ for i in range(1, NUM_GAMES + 1):
     print(f"\nGame {i}\n")
         
     count_moves = 0
-    while novo_game.game_winner == EMPTY:
+    while novo_game.game_winner == EMPTY and not novo_game.board_is_full:
         if novo_game.player() == PLAYER_PIECE:
             count_moves += 1
             aiMove_1()
