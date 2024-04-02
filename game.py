@@ -230,10 +230,22 @@ class game:
     def player(self):
         if self.board_is_full:
             return None
-        elif self.turn % 2 == 0:
-            return PLAYER_PIECE
+        
+        elif self.first == AI_PIECE:
+            if self.turn % 2 == 0:
+                return AI_PIECE
+            else:
+                return PLAYER_PIECE
+            
+        elif self.first == PLAYER_PIECE:
+            if self.turn % 2 == 0:
+                return PLAYER_PIECE
+            else:
+                return AI_PIECE
+            
         else:
-            return AI_PIECE
+            print("Problema na função player")
+            quit()
 
     """Recebe um estado e retorna o jogador nesse turno."""
 
