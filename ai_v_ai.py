@@ -1,10 +1,10 @@
 #
 from game import *
 from aStar import *
-from minimax import *
-from alphaBeta import *
+from ai_miniMax import *
+from ai_alphaBeta import *
 from aStar_rules import *
-from aStar_depth import *
+from ai_aStar import *
 from mcts_new import *
 
 import os #poder usar função clear

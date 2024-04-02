@@ -48,7 +48,7 @@ class MonteCarloTreeSearch:
                 melhor = child
             print("----", child.value, child.visits, "...", child.state.last_move, child.value/child.visits)
         print("lolada")
-        return melhor.state.last_move
+        return 0,melhor.state.last_move # retorna 0 em [0] para manter o output consistente com as outras ais
 
     def choose(self, node):
 

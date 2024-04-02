@@ -8,7 +8,7 @@ Está com um "problema". Quando a IA sabe que já vai ganhar ela empata a vitori
 
 """
 
-class minimax:
+class ai_miniMax:
     def __init__(self):
         pass
 
