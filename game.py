@@ -13,10 +13,10 @@ class game:
     def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
         self.board_is_full = False
-        self.segment_heuristics = [0 for _ in range (69)]
+        if calculate_heuristics: self.segment_heuristics = [0 for _ in range (69)] # Caso bool seja falso, não é necessario inicializar essa variavel
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
-        self.calculate_heuristics = calculate_heuristics
+        self.calculate_heuristics = calculate_heuristics 
         self.first = PLAYER_PIECE #or AI_PIECE
         self.turn = 0
 
@@ -55,8 +55,10 @@ class game:
         self.putGamePiece(collumn, PLAYER_PIECE)
         return
 
-    """Verifica qual a próxima row vazia e alterar a põe a peça nesta row. 
-    Checa após cada movimento a função check_win_after_move para saber se houve ganhador."""
+    """Verifica qual a próxima row vazia e põe a peça nesta row. 
+    Checa após cada movimento a função check_win_after_move para saber se houve ganhador.
+    caso calculate_heuristics==True calcula as heuristicas dos segmentos alterados por aquele movimento
+    """
 
     def putGamePiece(self, collumn, piece):
         available = self.availableCollumns()
@@ -224,7 +226,7 @@ class game:
                 return "O"
         return None
 
-    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual."""
+    #Função que retorna qual é o proximo jogador.
 
     def player(self):
         if self.board_is_full:
@@ -245,18 +247,8 @@ class game:
         else:
             print("Problema na função player")
             quit()
-        
 
-    """
-        if self.board_is_full:
-            return None
-        
-        elif self.turn % 2 == 0:
-            return PLAYER_PIECE
-        else:
-            return AI_PIECE
-
-    Recebe um estado e retorna o jogador nesse turno."""
+    """Recebe um estado e retorna o jogador nesse turno."""
 
     # def player(self):
     #     cx = 0  # contador de X
@@ -299,3 +291,9 @@ class game:
             return -512
         else:
             return 0
+        
+    def stop_calculate(self): # Para uso no mcts, faz com que parem de ser calculado as heuristicas
+        self.calculate_heuristics = False
+        delattr(self, "segment_heuristics")
+        return
+
