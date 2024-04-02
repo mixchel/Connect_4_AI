@@ -27,7 +27,7 @@ class alphaBeta:
             v = -np.infty
             move = None
             for action in state.availableCollumns():
-                new_state = copy.deepcopy(state)  # Assume que a classe game tem o método copy() para criar uma cópia do estado
+                new_state = copy.deepcopy(state)  
                 new_state.putGamePiece(action, "X")
                 test = self.get_move(new_state, depth - 1, alpha, beta)[0]
                 if test > v:
@@ -41,7 +41,7 @@ class alphaBeta:
             v = np.infty
             move = None
             for action in state.availableCollumns():
-                new_state =  copy.deepcopy(state)  # Assume que a classe game tem o método copy() para criar uma cópia do estado
+                new_state =  copy.deepcopy(state)  
                 new_state.putGamePiece(action, "O")
                 test = self.get_move(new_state, depth - 1, alpha, beta)[0]
                 if test < v:

@@ -28,9 +28,9 @@ class MCTSNode:
 
 
 class MonteCarloTreeSearch:
-    def __init__(self):
-        self.maxIter = 10000
-        self.exploring_rate = 10
+    def __init__(self, maxIter=10000, exploring_rate=10):
+        self.maxIter = maxIter
+        self.exploring_rate = exploring_rate
         
     def get_move(self, state):
         self.peca = state.player()
