@@ -95,57 +95,11 @@ class game:
     Verifica somente os arrays que contém a peça em [move_row, move_col]."""
     def check_win_after_move(self, move_row, move_col, piece):
         # verificar se houve vitória na row
-        row_count = 0
-        for i in range(move_row - 3, move_row + 4):
-            if i in range(0, NUM_ROW) and self.board[i][move_col] == piece:
-                row_count += 1
-            else:
-                row_count = 0
-            if row_count == 4:
-                return True
-
-        # verificar se houve vitória na coluna
-        collumn_count = 0
-        for j in range(move_col - 3, move_col + 4):
-            if j in range(NUM_COL) and self.board[move_row][j] == piece:
-                collumn_count += 1
-            else:
-                collumn_count = 0
-            if collumn_count == 4:
-                return True
-
-        # verificar se houve vitória na diagonal principal e adjacentes
-        downrightdiag_count = 0
-        for k in range(-3, 4):
-            i = move_row + k
-            j = move_col + k
-            if (
-                i in range(NUM_ROW)
-                and j in range(NUM_COL)
-                and self.board[i][j] == piece
-            ):
-                downrightdiag_count += 1
-            else:
-                downrightdiag_count = 0
-            if downrightdiag_count == 4:
-                return True
-
-        # verificar se houve vitória na diagonal secundária e adjacentes
-        upleftdiag_count = 0
-        for k in range(-3, 4):
-            i = move_row - k
-            j = move_col + k
-            if (
-                i in range(NUM_ROW)
-                and j in range(NUM_COL)
-                and self.board[i][j] == piece
-            ):
-                upleftdiag_count += 1
-            else:
-                upleftdiag_count = 0
-            if upleftdiag_count == 4:
-                return True
+        win_segment = [piece, piece, piece, piece]
+        for i in self.segments_that_intersect(move_row, move_col):
+            if i == win_segment: return True
         return False
+        
 
     # função que começa o jogo
     def start_ai(self):
