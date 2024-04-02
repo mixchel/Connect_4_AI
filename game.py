@@ -10,7 +10,6 @@ index_dict,pos_dict = gen_dict()
 
 
 class game:
-    #turn = 0
     def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
         self.board_is_full = False
@@ -19,6 +18,7 @@ class game:
         self.last_move = None
         self.calculate_heuristics = calculate_heuristics
         self.first = PLAYER_PIECE #or AI_PIECE
+        self.turn = 0
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -75,6 +75,7 @@ class game:
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
         if self.calculate_heuristics: self.update_heuristics(piece_placement, collumn) # atualiza as heuristicas se o bool for True
         self.last_move = collumn
+        self.turn += 1
         return
 
     """Checa a última row para saber quais colunas não estão cheias. Retorna a lista de colunas."""
@@ -226,43 +227,49 @@ class game:
     """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
     Não está em uso em outras classes."""
 
-    """    
-    def player_(self):
+    def player(self):
         if self.board_is_full:
             return None
         elif self.turn % 2 == 0:
             return PLAYER_PIECE
         else:
-            return AI_PIECE"""
+            return AI_PIECE
 
     """Recebe um estado e retorna o jogador nesse turno."""
 
-    def player(self):
-        cx = 0  # contador de X
-        co = 0  # contador de O
-        for i in range(6):
-            a = self.board[i]
-            for j in range(7):
-                b = a[j]
-                if b == PLAYER_PIECE:
-                    cx += 1
-                elif b == AI_PIECE:
-                    co += 1
-        # caso do tabuleiro estar completamente ocupado
-        if cx + co == NUM_COL * NUM_ROW:
-            return None
+    # def player(self):
+    #     cx = 0  # contador de X
+    #     co = 0  # contador de O
+    #     for i in range(6):
+    #         a = self.board[i]
+    #         for j in range(7):
+    #             b = a[j]
+    #             if b == PLAYER_PIECE:
+    #                 cx += 1
+    #             elif b == AI_PIECE:
+    #                 co += 1
+    #     # caso do tabuleiro estar completamente ocupado
+    #     if cx + co == NUM_COL * NUM_ROW:
+    #         return None
 
-        if cx < co:
-            return PLAYER_PIECE
-        elif cx > co:
-            return AI_PIECE
-        elif (cx == co) and (self.first == AI_PIECE):
-            return AI_PIECE
-        elif (cx == co) and (self.first == PLAYER_PIECE):
-            return PLAYER_PIECE
-        else:
-            print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
-            quit()
+        # if cx < co:
+        #     return PLAYER_PIECE
+        # elif cx > co:
+        #     return AI_PIECE
+        # elif (cx == co) and (self.first == AI_PIECE):
+        #     return AI_PIECE
+        # elif (cx == co) and (self.first == PLAYER_PIECE):
+        #     return PLAYER_PIECE
+        # else:
+        #     print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
+        #     quit()
+
+
+        # Se o número de X's for menor ou igual ao numéro de O's, então é a vez de X jogar.
+        # if cx <= co:
+        #     return PLAYER_PIECE
+        # else:
+        #     return AI_PIECE
 
     def utility(self):
         if self.game_winner == PLAYER_PIECE:
