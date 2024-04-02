@@ -1,3 +1,4 @@
+#
 import numpy as np
 NUM_ROW = 6
 NUM_COL = 7

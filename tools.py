@@ -1,3 +1,4 @@
+#
 def segmentate(input):
     out = []
     for i in range(len(input) - 3):
