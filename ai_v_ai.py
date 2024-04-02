@@ -3,6 +3,7 @@ from game import *
 from ai_miniMax import *
 from ai_alphaBeta import *
 from ai_aStar import *
+from ai_mcts import *
 from ai_mcts_test import *
 
 import os #poder usar função clear
