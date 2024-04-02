@@ -3,7 +3,7 @@ from game import *
 from aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
-from aStar_rules import *
+from ai_aStar import *
 from ai_aStar import *
 from mcts_new import *
 

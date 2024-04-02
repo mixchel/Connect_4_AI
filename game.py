@@ -18,6 +18,7 @@ class game:
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
         self.calculate_heuristics = calculate_heuristics
+        self.first = PLAYER_PIECE #or AI_PIECE
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -251,11 +252,17 @@ class game:
         if cx + co == NUM_COL * NUM_ROW:
             return None
 
-        # Se o número de X's for menor ou igual ao numéro de O's, então é a vez de X jogar.
-        if cx <= co:
+        if cx < co:
+            return PLAYER_PIECE
+        elif cx > co:
+            return AI_PIECE
+        elif (cx == co) and (self.first == AI_PIECE):
+            return AI_PIECE
+        elif (cx == co) and (self.first == PLAYER_PIECE):
             return PLAYER_PIECE
         else:
-            return AI_PIECE
+            print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
+            quit()
 
     def utility(self):
         if self.game_winner == PLAYER_PIECE:
