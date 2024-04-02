@@ -2,7 +2,7 @@ from game import *
 from ai_aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
-from mcts_new import *
+from ai_mcts import *
 import time #calcular tempo de execução
 import os #poder usar função clear
 from sys import platform #identificar plataforma
