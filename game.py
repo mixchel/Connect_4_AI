@@ -8,7 +8,6 @@ PLAYER_PIECE = "X"
 AI_PIECE = "O"
 index_dict,pos_dict = gen_dict()
 
-
 class game:
     def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
@@ -99,6 +98,7 @@ class game:
 
     """Função que checa se houve vitória após cada movimento. 
     Verifica somente os arrays que contém a peça em [move_row, move_col]."""
+    
     def check_win_after_move(self, move_row, move_col, piece):
         win_segment = [piece, piece, piece, piece]
         for i in self.segments_that_intersect(move_row, move_col): # verifica se houve vitoria em todos os segmentos que são modificados pelo ultimo movimento
@@ -207,12 +207,6 @@ class game:
             return True
         else:
             return self.board_is_full
-        """
-        elif len(self.availableCollumns())==0:
-            return True
-        else:
-            return False
-        """
 
     """Recebe um estado e retorna o vencedor (no caso deste existir)"""
 
@@ -248,42 +242,6 @@ class game:
             print("Problema na função player")
             quit()
 
-    """Recebe um estado e retorna o jogador nesse turno."""
-
-    # def player(self):
-    #     cx = 0  # contador de X
-    #     co = 0  # contador de O
-    #     for i in range(6):
-    #         a = self.board[i]
-    #         for j in range(7):
-    #             b = a[j]
-    #             if b == PLAYER_PIECE:
-    #                 cx += 1
-    #             elif b == AI_PIECE:
-    #                 co += 1
-    #     # caso do tabuleiro estar completamente ocupado
-    #     if cx + co == NUM_COL * NUM_ROW:
-    #         return None
-
-        # if cx < co:
-        #     return PLAYER_PIECE
-        # elif cx > co:
-        #     return AI_PIECE
-        # elif (cx == co) and (self.first == AI_PIECE):
-        #     return AI_PIECE
-        # elif (cx == co) and (self.first == PLAYER_PIECE):
-        #     return PLAYER_PIECE
-        # else:
-        #     print("Problema na função player") #acho que já consertei isso, mas vou deixar just in case -R
-        #     quit()
-
-
-        # Se o número de X's for menor ou igual ao numéro de O's, então é a vez de X jogar.
-        # if cx <= co:
-        #     return PLAYER_PIECE
-        # else:
-        #     return AI_PIECE
-
     def utility(self):
         if self.game_winner == PLAYER_PIECE:
             return 512
@@ -296,4 +254,3 @@ class game:
         self.calculate_heuristics = False
         delattr(self, "segment_heuristics")
         return
-
