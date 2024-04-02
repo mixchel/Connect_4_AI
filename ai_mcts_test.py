@@ -86,7 +86,7 @@ class MonteCarloTreeSearch:
         #        print("Returning move corresponding to the second-best child.")
         #        return 0, segundo_melhor.state.last_move
         print(self.posicoes_vulneraveis)        
-        if (melhor.state.last_move in self.posicoes_vulneraveis) and (segundo_melhor.state.last_move not in self.posicoes_vulneraveis):
+        if (melhor.state.last_move not in self.posicoes_vulneraveis) and (segundo_melhor.state.last_move in self.posicoes_vulneraveis):
             return 0, segundo_melhor.state.last_move
         return 0, melhor.state.last_move
     def choose(self, node):
