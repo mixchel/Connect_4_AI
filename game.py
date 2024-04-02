@@ -224,18 +224,39 @@ class game:
                 return "O"
         return None
 
-    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
-    Não está em uso em outras classes."""
+    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual."""
 
     def player(self):
         if self.board_is_full:
             return None
+        
+        elif self.first == AI_PIECE:
+            if self.turn % 2 == 0:
+                return AI_PIECE
+            else:
+                return PLAYER_PIECE
+            
+        elif self.first == PLAYER_PIECE:
+            if self.turn % 2 == 0:
+                return PLAYER_PIECE
+            else:
+                return AI_PIECE
+            
+        else:
+            print("Problema na função player")
+            quit()
+        
+
+    """
+        if self.board_is_full:
+            return None
+        
         elif self.turn % 2 == 0:
             return PLAYER_PIECE
         else:
             return AI_PIECE
 
-    """Recebe um estado e retorna o jogador nesse turno."""
+    Recebe um estado e retorna o jogador nesse turno."""
 
     # def player(self):
     #     cx = 0  # contador de X

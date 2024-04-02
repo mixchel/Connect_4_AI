@@ -73,13 +73,17 @@ def first_player(): #decide quem vai primeiro
     return first
 
 while NEW_GAME == 1: #Iniciando o game loop
-    novo_game = game() #inicia um novo objeto game
+     #inicia um novo objeto game
     clearTerminal()
     print("\nNew Game\n")
     
     start = start_ai()
     ai = start[0]
     aiName = start[1]
+    if aiName == "MTC":
+        novo_game = game(calculate_heuristics=False)
+    else:
+        novo_game = game()
     
     if first_player() == 0:
         novo_game.first = PLAYER_PIECE
@@ -91,9 +95,9 @@ while NEW_GAME == 1: #Iniciando o game loop
         if novo_game.player() == PLAYER_PIECE:
             playerMove()
         else:
-            #ti = time.time()
+            ti = time.time()
             aiMove()
-            #print(time.time()-ti)
+            print(time.time()-ti)
 
     clearTerminal()
     novo_game.drawBoard()
