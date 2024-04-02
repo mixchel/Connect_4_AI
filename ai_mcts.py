@@ -35,7 +35,9 @@ class MonteCarloTreeSearch:
         
     def get_move(self, state):
         self.peca = state.player()
-        node = MCTSNode(copy.deepcopy(state))
+        new_state = copy.deepcopy(state)
+        if new_state.calculate_heuristics: new_state.stop_calculate()
+        node = MCTSNode(copy.deepcopy(new_state))
         for _ in range(self.maxIter):
             front = self.choose(node)
             value = self.rollout(front)

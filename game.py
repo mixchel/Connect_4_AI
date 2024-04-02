@@ -13,7 +13,7 @@ class game:
     def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
         self.board_is_full = False
-        self.segment_heuristics = [0 for _ in range (69)]
+        if calculate_heuristics: self.segment_heuristics = [0 for _ in range (69)] # if bool is false, there is no need to initialize this variable
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
         self.calculate_heuristics = calculate_heuristics
@@ -224,7 +224,8 @@ class game:
                 return "O"
         return None
 
-    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual."""
+    """Otimização da função player. Utiliza self.turn para avaliar qual o jogador atual.
+    Não está em uso em outras classes."""
 
     def player(self):
         if self.board_is_full:
@@ -245,18 +246,8 @@ class game:
         else:
             print("Problema na função player")
             quit()
-        
 
-    """
-        if self.board_is_full:
-            return None
-        
-        elif self.turn % 2 == 0:
-            return PLAYER_PIECE
-        else:
-            return AI_PIECE
-
-    Recebe um estado e retorna o jogador nesse turno."""
+    """Recebe um estado e retorna o jogador nesse turno."""
 
     # def player(self):
     #     cx = 0  # contador de X
@@ -299,3 +290,9 @@ class game:
             return -512
         else:
             return 0
+        
+    def stop_calculate(self):
+        self.calculate_heuristics = False
+        delattr(self, "segment_heuristics")
+        return
+
