@@ -2,7 +2,7 @@ from game import *
 from ai_aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
-from ai_mcts import *
+from ai_mcts_test import *
 import time #calcular tempo de execução
 import os #poder usar função clear
 from sys import platform #identificar plataforma
@@ -23,12 +23,14 @@ def aiMove_1(): #movimento da ai 1
     ai_move = ai_1.get_move(novo_game)[1]
     if ai_move != None:
         novo_game.putGamePiece(ai_move,PLAYER_PIECE)
+        print("||"*10)
 
 def aiMove_2(): #movimento da ai 2
     ai_move = ai_2.get_move(novo_game)[1]
     if ai_move != None:
         novo_game.putGamePiece(ai_move,AI_PIECE)
-
+        print(ai_move)
+        print("||"*10)
 def start_ai(): #inicializa a AI 1
     start = -1 # error handling
     while start not in range(4):

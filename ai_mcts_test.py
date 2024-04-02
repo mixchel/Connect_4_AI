@@ -3,6 +3,7 @@ import math
 import numpy as np
 import random
 import copy
+import time
 
 
 class MCTSNode:
@@ -29,7 +30,7 @@ class MCTSNode:
 
 
 class MonteCarloTreeSearch:
-    def __init__(self, maxIter=10000, exploring_rate=10):
+    def __init__(self, maxIter=100000, exploring_rate=11):
         self.maxIter = maxIter
         self.exploring_rate = exploring_rate
         
@@ -38,41 +39,56 @@ class MonteCarloTreeSearch:
         self.peca = state.player()
         self.peca_do_outro = "X" if self.peca == "O" else "O"
         ad = state.availableCollumns()
-        #for i in ad:
-        #    st = copy.deepcopy(state)
-        #    st.putGamePiece(i, self.peca)
-        #    if st.game_winner == self.peca:
-        #        return 0, i
-        #for i in ad:
-        #    st = copy.deepcopy(state)
-        #    st.putGamePiece(i, self.peca_do_outro)
-        #    print(st.game_winner)
-        #    if st.game_winner == self.peca_do_outro:
-        #        return 0, i
+        # Check for immediate wins for current player
+        for i in ad:
+            st = copy.deepcopy(state)
+            st.putGamePiece(i, self.peca)
+            if st.game_winner == self.peca:
+                return 0, i
+        
+        # Check for immediate wins for opponent
+        self.posicoes_vulneraveis = []
+        for i in ad:
+            st = copy.deepcopy(state)
+            st.putGamePiece(i, self.peca_do_outro)
+            if st.game_winner == self.peca_do_outro:
+                self.posicoes_vulneraveis.append(i)
+        time_start = time.time()
         node = MCTSNode(copy.deepcopy(state))
         for _ in range(self.maxIter):
             front = self.choose(node)
             value = self.rollout(front)
             self.backprop(front, value)
+            if time.time() - time_start > 10:
+                break
         #melhor =  self.bestChild(node)
+    # Find the best move based on the highest average value per visit
         mv = float('-inf')
         melhor = node.children[0]
+        segundo_melhor = node.children[0]
         for child in node.children:
-            if child.value/child.visits > mv:
-                sm = melhor
-                smv = mv
-                mv = child.value/child.visits
+            if child.visits > 0 and child.value / child.visits > mv:
+                mv = child.value / child.visits
+                segundo_melhor = melhor
                 melhor = child
+            elif child.visits > 0 and child.value / child.visits > segundo_melhor.value / segundo_melhor.visits:
+                segundo_melhor = child
+        
+        # Print debug information
+        for child in node.children:
             print("----", child.value, child.visits, "...", child.state.last_move, child.value/child.visits)
-        print("lolada")
-
-
-        for child in melhor.children:
-            if child.value/child.visits ==0 and child.visits >= 0.1*melhor.visits:
-                return 0, sm.state.last_move
-            print("FILHO ----", child.value, child.visits, "...", child.state.last_move, child.value/child.visits)
-        return 0,melhor.state.last_move # retorna 0 em [0] para manter o output consistente com as outras ais
-
+        #
+        ## Check for low win rate but significant visits in children of the best move
+        #for child in melhor.children:
+        #    print("FILHO", child.state.last_move, " ----> ", child.value, child.visits, child.value/child.visits)
+        #    if child.visits >= 0.1 * melhor.visits and child.value / child.visits == 0:
+        #        print("Low win rate but significant visits in children of the best move.")
+        #        print("Returning move corresponding to the second-best child.")
+        #        return 0, segundo_melhor.state.last_move
+        print(self.posicoes_vulneraveis)        
+        if (melhor.state.last_move in self.posicoes_vulneraveis) and (segundo_melhor.state.last_move not in self.posicoes_vulneraveis):
+            return 0, segundo_melhor.state.last_move
+        return 0, melhor.state.last_move
     def choose(self, node):
 
         while not node.state.terminal():
