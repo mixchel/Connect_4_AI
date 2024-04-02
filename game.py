@@ -99,24 +99,6 @@ class game:
         for i in self.segments_that_intersect(move_row, move_col): # verifica se houve vitoria em todos os segmentos que são modificados pelo ultimo movimento
             if i == win_segment: return True
         return False
-        
-
-    # função que começa o jogo
-    def start_ai(self):
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta; 3 = MCTS: "))
-        if starts not in range(4):
-            self.start_ai()
-        return starts
-
-    # não está em uso ainda
-    # explicar o que faz pls
-    def movelist_2_board(self, moves):
-        nextPiece = PLAYER_PIECE  # o jogo tem que começar com o player
-        oldPiece = AI_PIECE
-        for move in moves:
-            if not self.board_is_full and move in self.availableCollumns():
-                self.putGamePiece(move, nextPiece)
-                nextPiece, oldPiece = oldPiece, nextPiece
 
     # retorna lista com todos os segmentos de 4 em todas as direções
                 
