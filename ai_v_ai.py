@@ -1,9 +1,7 @@
 #
 from game import *
-from aStar import *
 from ai_miniMax import *
 from ai_alphaBeta import *
-from ai_aStar import *
 from ai_aStar import *
 from mcts_new import *
 
@@ -14,9 +12,9 @@ import csv
 
 NUM_GAMES = 10
 
-mini = minimax()
+mini = ai_miniMax()
 mcts =MonteCarloTreeSearch()
-alpha = alphaBeta()
+alpha = ai_alphaBeta()
 
 mc =0
 mm =0
@@ -56,7 +54,7 @@ if lol==0:
             #novo_game.drawBoard()
             if novo_game.terminal():
                 break
-            mc_move = mcts.get_move(novo_game)
+            mc_move = mcts.get_move(novo_game)[1]
             if mc_move!= None:
                 novo_game.putGamePiece(mc_move, "O")
                 act=act+str(mc_move)+"-"
@@ -87,7 +85,7 @@ elif lol==2:
             act=act+str(alpha_move)+"-"
             if novo_game.terminal():
                 break
-            mc_move = mcts.get_move(novo_game)
+            mc_move = mcts.get_move(novo_game)[1]
             if mc_move!= None:
                 novo_game.putGamePiece(mc_move, "O")
                 act= act+str(mc_move)+"-"
@@ -112,7 +110,7 @@ elif lol==3:
         act=""
         while novo_game.terminal() == False:
             q_t = q_t+1
-            mc_move = mcts.get_move(novo_game)
+            mc_move = mcts.get_move(novo_game)[1]
             if mc_move!= None:
                 novo_game.putGamePiece(mc_move, "X")
                 act+=str(mc_move)+"-"
@@ -149,7 +147,7 @@ else:
         act=""
         while novo_game.terminal() == False:
             q_t = q_t+1
-            mc_move = mcts.get_move(novo_game)
+            mc_move = mcts.get_move(novo_game)[1]
             if mc_move!= None:
                 novo_game.putGamePiece(mc_move, "X")
                 act=str(mc_move)+"-"
