@@ -3,7 +3,7 @@ from game import *
 from ai_miniMax import *
 from ai_alphaBeta import *
 from ai_aStar import *
-from mcts_new import *
+from ai_mcts import *
 
 import os #poder usar função clear
 from sys import platform
@@ -13,7 +13,7 @@ import csv
 NUM_GAMES = 10
 
 mini = ai_miniMax()
-mcts =MonteCarloTreeSearch()
+mcts = MonteCarloTreeSearch()
 alpha = ai_alphaBeta()
 
 mc =0
