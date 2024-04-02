@@ -11,12 +11,13 @@ index_dict,pos_dict = gen_dict()
 
 class game:
     #turn = 0
-    def __init__(self):
+    def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
         self.board_is_full = False
         self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
+        self.calculate_heuristics = calculate_heuristics
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -71,7 +72,7 @@ class game:
         elif not self.availableCollumns():
             self.board_is_full = True  # se não há colunas vazias, a board está cheia
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
-        self.update_heuristics(piece_placement, collumn)
+        if self.calculate_heuristics: self.update_heuristics(piece_placement, collumn) # atualiza as heuristicas se o bool for True
         self.last_move = collumn
         return
 
@@ -95,75 +96,10 @@ class game:
     """Função que checa se houve vitória após cada movimento. 
     Verifica somente os arrays que contém a peça em [move_row, move_col]."""
     def check_win_after_move(self, move_row, move_col, piece):
-        # verificar se houve vitória na row
-        row_count = 0
-        for i in range(move_row - 3, move_row + 4):
-            if i in range(0, NUM_ROW) and self.board[i][move_col] == piece:
-                row_count += 1
-            else:
-                row_count = 0
-            if row_count == 4:
-                return True
-
-        # verificar se houve vitória na coluna
-        collumn_count = 0
-        for j in range(move_col - 3, move_col + 4):
-            if j in range(NUM_COL) and self.board[move_row][j] == piece:
-                collumn_count += 1
-            else:
-                collumn_count = 0
-            if collumn_count == 4:
-                return True
-
-        # verificar se houve vitória na diagonal principal e adjacentes
-        downrightdiag_count = 0
-        for k in range(-3, 4):
-            i = move_row + k
-            j = move_col + k
-            if (
-                i in range(NUM_ROW)
-                and j in range(NUM_COL)
-                and self.board[i][j] == piece
-            ):
-                downrightdiag_count += 1
-            else:
-                downrightdiag_count = 0
-            if downrightdiag_count == 4:
-                return True
-
-        # verificar se houve vitória na diagonal secundária e adjacentes
-        upleftdiag_count = 0
-        for k in range(-3, 4):
-            i = move_row - k
-            j = move_col + k
-            if (
-                i in range(NUM_ROW)
-                and j in range(NUM_COL)
-                and self.board[i][j] == piece
-            ):
-                upleftdiag_count += 1
-            else:
-                upleftdiag_count = 0
-            if upleftdiag_count == 4:
-                return True
+        win_segment = [piece, piece, piece, piece]
+        for i in self.segments_that_intersect(move_row, move_col): # verifica se houve vitoria em todos os segmentos que são modificados pelo ultimo movimento
+            if i == win_segment: return True
         return False
-
-    # função que começa o jogo
-    def start_ai(self):
-        starts = int(input("\nChoose which AI to play against: 0 = A*; 1 = mini-max; 2 = AlphaBeta; 3 = MCTS: "))
-        if starts not in range(4):
-            self.start_ai()
-        return starts
-
-    # não está em uso ainda
-    # explicar o que faz pls
-    def movelist_2_board(self, moves):
-        nextPiece = PLAYER_PIECE  # o jogo tem que começar com o player
-        oldPiece = AI_PIECE
-        for move in moves:
-            if not self.board_is_full and move in self.availableCollumns():
-                self.putGamePiece(move, nextPiece)
-                nextPiece, oldPiece = oldPiece, nextPiece
 
     # retorna lista com todos os segmentos de 4 em todas as direções
                 
