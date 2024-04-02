@@ -10,12 +10,13 @@ index_dict,pos_dict = gen_dict()
 
 class game:
     #turn = 0
-    def __init__(self):
+    def __init__(self, calculate_heuristics=True):
         self.game_winner = EMPTY  # variáveis que controlam o fim do jogo
         self.board_is_full = False
         self.segment_heuristics = [0 for _ in range (69)]
         self.board = np.full([NUM_ROW, NUM_COL], EMPTY)
         self.last_move = None
+        self.calculate_heuristics = calculate_heuristics
 
     def drawBoard(self):
         for i in range(7): print(i, end=" ") #imprime os numeros das colunas
@@ -70,7 +71,7 @@ class game:
         elif not self.availableCollumns():
             self.board_is_full = True  # se não há colunas vazias, a board está cheia
         # not list aparentemente é um dos jeitos mais eficientes de checar se uma lista está vazia, python é estranho - M
-        self.update_heuristics(piece_placement, collumn)
+        if self.calculate_heuristics: self.update_heuristics(piece_placement, collumn) # atualiza as heuristicas se o bool for True
         self.last_move = collumn
         return
 
@@ -94,9 +95,8 @@ class game:
     """Função que checa se houve vitória após cada movimento. 
     Verifica somente os arrays que contém a peça em [move_row, move_col]."""
     def check_win_after_move(self, move_row, move_col, piece):
-        # verificar se houve vitória na row
         win_segment = [piece, piece, piece, piece]
-        for i in self.segments_that_intersect(move_row, move_col):
+        for i in self.segments_that_intersect(move_row, move_col): # verifica se houve vitoria em todos os segmentos que são modificados pelo ultimo movimento
             if i == win_segment: return True
         return False
         
