@@ -278,3 +278,9 @@ class game:
             return -512
         else:
             return 0
+        
+    def stop_calculate(self):
+        self.calculate_heuristics = False
+        delattr(self, "segment_heuristics")
+        return
+
