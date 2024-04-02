@@ -3,14 +3,14 @@ from game import *
 from ai_miniMax import *
 from ai_alphaBeta import *
 from ai_aStar import *
-from ai_mcts import *
+from ai_mcts_test import *
 
 import os #poder usar função clear
 from sys import platform
 import numpy as np
 import csv
 
-NUM_GAMES = 10
+NUM_GAMES = 2
 
 mini = ai_miniMax()
 mcts = MonteCarloTreeSearch()
@@ -81,12 +81,15 @@ elif lol==2:
             q_t = q_t+1
             alpha_move = alpha.get_move(novo_game)[1]
             novo_game.putGamePiece(alpha_move, "X")
+            print("ALPHA",alpha_move)
+            novo_game.drawBoard()
             #novo_game.drawBoard()
             act=act+str(alpha_move)+"-"
             if novo_game.terminal():
                 break
             mc_move = mcts.get_move(novo_game)[1]
             if mc_move!= None:
+                print("MONTE",mc_move)
                 novo_game.putGamePiece(mc_move, "O")
                 act= act+str(mc_move)+"-"
             #novo_game.drawBoard()
@@ -94,6 +97,7 @@ elif lol==2:
             mm += 1
         if novo_game.game_winner=="O":
             mc +=1
+        novo_game.drawBoard()
         print("Jogo: ", gg, " Vencedor: ",novo_game.game_winner, " em ", q_t, " jogadas")
         sav_list.append((novo_game.game_winner, q_t, act))
 
