@@ -24,5 +24,5 @@ class ai_aStar:
             actions.append(action)
             heuristic.append(new_state.evaluate_all())
         index_min = np.argmin(heuristic)
-        print(heuristic, actions)
+        #print(heuristic, actions)
         return heuristic, actions[index_min]
